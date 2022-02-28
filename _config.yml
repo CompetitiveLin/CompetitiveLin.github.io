@@ -26,10 +26,10 @@ search: true
 
 # Build settings
 markdown: kramdown
-# remote_theme: mmistakes/minimal-mistakes
-theme: minimal-mistakes-jekyll
-repository: CompetitiveLin/CompetitiveLin.github.io
-github: [metadata]
+remote_theme: mmistakes/minimal-mistakes
+# theme: minimal-mistakes-jekyll
+# repository: CompetitiveLin/CompetitiveLin.github.io
+# github: [metadata]
 # Outputting
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
