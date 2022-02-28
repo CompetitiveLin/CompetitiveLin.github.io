@@ -26,15 +26,18 @@ search: true
 
 # Build settings
 markdown: kramdown
-remote_theme: mmistakes/minimal-mistakes
-# theme: minimal-mistakes-jekyll
-# repository: CompetitiveLin/CompetitiveLin.github.io
-# github: [metadata]
+github: [metadata]
+###########################################
+remote_theme: mmistakes/minimal-mistakes  # GitHub-Pages    70s
+# theme: minimal-mistakes-jekyll          # localhost:4000  2s
+###########################################
 # Outputting
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
 paginate_path: /page:num/
-timezone: Asia/Shanghai # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+# timezone: Asia/Shanghai # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+excerpt_separator: "<!--more-->"  # 博客的摘要截取至<!--more-->
 
 include:
   - _pages
