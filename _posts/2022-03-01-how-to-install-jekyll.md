@@ -84,3 +84,4 @@ jekyll serve
 ## Reference
   
   1. [windows安装jekyll](https://www.cnblogs.com/mingyue5826/p/11533978.html)
+  2. [搭建个人博客：Jekyll + Github Pages + VSCode](https://zjpzhao.github.io/posts/jekyll-githubpages/)
