@@ -27,11 +27,10 @@ search: true
 # Build settings
 markdown: kramdown
 github: [metadata]
-theme: minimal-mistakes-jekyll            # localhost:4000  2s
 ###########################################
 remote_theme: mmistakes/minimal-mistakes  # GitHub-Pages    70s
+# theme: minimal-mistakes-jekyll          # localhost:4000  2s
 ###########################################
-
 # Outputting
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
