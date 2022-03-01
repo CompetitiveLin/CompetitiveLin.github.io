@@ -62,9 +62,10 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "林泽"
+  name   : "CompetitiveLin"
   avatar : "/assets/images/bio-photo.jpg"
   bio    : "When you pray, move your feet."
+  location : "Hangzhou, Zhejiang"
   links:
     # - label: "Website"
     #   icon: "fas fa-fw fa-link"
