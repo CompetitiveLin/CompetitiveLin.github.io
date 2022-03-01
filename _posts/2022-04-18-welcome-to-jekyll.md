@@ -1,6 +1,12 @@
 ---
-title: "Welcome to Jekyll!"
+title: "Welcome to *Jekyll*!"
 date: 2022-02-28T23:00:00+800
+tagline: "This is a custom tagline content which overrides the *default* page excerpt."
+header:
+  overlay_color: "#333"
+  actions:
+  - label: "Learn more"
+    url: "https://jekyllrb.com/docs/"
 show_date: true
 categories:
   - Uncategorized

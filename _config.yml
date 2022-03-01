@@ -37,8 +37,6 @@ paginate: 5 # amount of posts to show
 paginate_path: /page:num/
 # timezone: Asia/Shanghai # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
-excerpt_separator: "<!--more-->"  # 博客的摘要截取至<!--more-->
-
 include:
   - _pages
 
