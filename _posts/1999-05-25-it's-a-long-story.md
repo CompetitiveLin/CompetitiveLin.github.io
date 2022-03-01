@@ -4,13 +4,11 @@ excerpt: "This is a user-defined post excerpt. It should be displayed in place o
 date: 1999-05-25T10:00:00+800
 last_modified_at: 2022-02-28T19:00:00+800
 categories:
-  - Edge Case
+  - Jekyll Tutorial
 tags:
-  - content
-  - css
-  - edge case
-  - lists
-  - markup
+  - Markdown
+  - Html
+  - YAML Front
 header:
   overlay_image: /assets/images/unsplash-image-1.jpg
   # og_image: /assets/images/unsplash-og-mage-1.jpg
