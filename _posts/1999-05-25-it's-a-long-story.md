@@ -26,7 +26,7 @@ toc_label: *title
 ---
 
 # Header image
-A header image with an OpenGraph override.
+A header image with an OpenGraph override[^1].
 
 ```yaml
 header:
@@ -267,6 +267,15 @@ In just a bit here, you should see the text start to wrap below the right aligne
 
 And just when you thought we were done, we're going to do them all over again with captions!
 
+{% capture fig_img %}
+![Foo]({{ "/assets/images/unsplash-gallery-image-3.jpg" | relative_url }})
+{% endcapture %}
+
+<figure>
+  {{ fig_img | markdownify | remove: "<p>" | remove: "</p>" }}
+  <figcaption>Photo from Unsplash.</figcaption>
+</figure>
+
 <figure class="align-center">
   <a href="{{ site.url }}{{ site.baseurl }}/assets/images/image-alignment-580x300.jpg">
   <img src="{{ site.url }}{{ site.baseurl }}/assets/images/image-alignment-580x300.jpg" alt="">
@@ -315,5 +324,7 @@ And that's a wrap, yo! You survived the tumultuous waters of alignment. Image al
 # Date modified
 
 **This post has been updated and show a modified date.**
+
+# Reference
 
 [^1]: Texture image courtesty of [Lovetextures](http://www.lovetextures.com/)

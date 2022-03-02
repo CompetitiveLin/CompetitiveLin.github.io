@@ -10,7 +10,7 @@
 	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
 	// Placeholders with the same ids are connected.
 	// Example:
-	"Print to console": {
+	"Markdown snippet": {
 		"prefix": "md",
 		"body": [
 			"---",
@@ -30,6 +30,15 @@
 			 "$0"
 		],
 		"description": "Markdown template for jekyll."
+	},
+
+	"Time snippet": {
+		"prefix": "time",
+		"body": [
+			"${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}+800",
+		],
+		"description": "For last modified time."
 	}
+
 }
 ```
