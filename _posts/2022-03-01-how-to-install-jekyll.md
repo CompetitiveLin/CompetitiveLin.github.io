@@ -78,9 +78,6 @@ jekyll serve
 
 解决方法：终端输入`bundle add webrick`.See [here](https://github.com/jekyll/jekyll/issues/8523).
 
-### B.
-
-
 ## Reference
   
   1. [windows安装jekyll](https://www.cnblogs.com/mingyue5826/p/11533978.html)

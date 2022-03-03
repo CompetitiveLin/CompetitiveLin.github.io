@@ -6,10 +6,7 @@ tags: Github Branch Commits Github_Desktop
 date: 2022-03-02T13:00:12+800
 header:
   overlay_image: /assets/images/unsplash-image-1.jpg
-show_date: true
-toc: true
 toc_label: *title
-toc_sticky: true
 last_modified_at: 2022-03-02T16:39:43+800
 ---
 

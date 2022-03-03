@@ -31,6 +31,14 @@ github: [metadata]
 remote_theme: CompetitiveLin/minimal-mistakes  # Remote theme from https://github.com/CompetitiveLin/minimal-mistakes  70s
 # theme: minimal-mistakes-jekyll               # localhost:4000  2s
 ###########################################
+
+repository: "CompetitiveLin/CompetitiveLin.github.io"
+comments:
+  provider: "utterances"
+  utterances:
+    theme: "github-light"
+    issue_term: "pathname"
+
 # Outputting
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
@@ -104,6 +112,9 @@ defaults:
       comments: true
       share: true
       related: true
+      show_date: true
+      toc: true
+      toc_sticky: true
   # _pages
   - scope:
       path: "_pages"

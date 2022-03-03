@@ -21,10 +21,7 @@
 			"date: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}+800",
 			"header:",
 			"  overlay_image: /assets/images/unsplash-image-1.jpg",
-		  	"show_date: true",
-		  	"toc: true",
 			"toc_label: *title",
-		  	"toc_sticky: true",
 		 	"last_modified_at:",
 			 "---",
 			 "$0"
