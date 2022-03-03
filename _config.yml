@@ -38,6 +38,7 @@ comments:
   utterances:
     theme: "github-light"
     issue_term: "pathname"
+    label: "comments"
 
 # Outputting
 permalink: /:categories/:title/
