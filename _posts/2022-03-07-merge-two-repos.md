@@ -3,7 +3,7 @@ title: Github合并两个不同的仓库
 categories: [Tutorial, Github]
 tags: [github, branch, commits, git]
 date: 2022-03-07T21:55:10+800
-last_modified_at: 
+last_modified_at: 2022-03-08T00:47:45+800
 pin: false
 ---
 
@@ -27,8 +27,11 @@ git clone git@github.com:CompetitiveLin/CompetitiveLin.github.io
 git remote add base git@github.com:CompetitiveLin/dumped-CompetitiveLin.github.io
 ```
 
-查看remote: `git remote -v`
-删除remote: `git remote rm base`
+此时查看remote: `git remote -v`，如下图所示：
+
+![](/images/posts/4-1.png)
+
+如果需要删除remote: `git remote rm base`
 
 ## 3. 把base远程仓库中数据抓取到本仓库
 
@@ -56,7 +59,9 @@ git checkout main
 git merge another
 ```
 
-此时可能出现`fatal: refusing to merge unrelated histories`的报错信息。
+此时可能出现类似下图`fatal: refusing to merge unrelated histories`的报错信息。
+
+![](/images/posts/4-2.png)
 
 解决方法：
 
