@@ -1,12 +1,8 @@
 ---
-title: &title 用Python实现点击图片并输出HSV或BRG的值
-excerpt: 
+title: 用Python实现点击图片并输出HSV或BRG的值
 categories: ["Python"]
 tags: Python HSV BGR Opencv
 date: 2022-03-04T13:35:49+800
-header:
-  overlay_image: /assets/images/unsplash-image-1.jpg
-toc_label: *title
 last_modified_at: 
 ---
 

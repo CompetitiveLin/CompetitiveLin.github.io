@@ -1,9 +1,10 @@
 ---
 title: It's a Long Story
+categories: [Tutorial, Jekyll]
+tags: [getting started, syntax]
 date: 1999-05-25T10:00:00+800
-last_modified_at: 2022-02-28T19:00:00+800
-categories: [Uncategorized]
-tags: [markdown, html, yaml, syntax]
+last_modified_at: 2022-03-07T20:55:16+800
+pin: false
 ---
 
 This post is to show Markdown syntax rendering on [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy), you can also use it as an example of writing. Now, let's start looking at text and typography.
@@ -257,7 +258,7 @@ echo 'No more line numbers!'
 ````
 # Learn More
 
-For more knowledge about Jekyll posts, visit the [Jekyll Docs: Posts](https://jekyllrb.com/docs/posts/).
+For more knowledge about Jekyll [posts][starter], visit the [Jekyll Docs: Posts](https://jekyllrb.com/docs/posts/).
 
 # Date modified
 
@@ -266,3 +267,10 @@ For more knowledge about Jekyll posts, visit the [Jekyll Docs: Posts](https://je
 # Reference
 
 [^1]: [Texture image courtesty of Lovetextures](http://www.lovetextures.com/)
+
+[starter]: https://github.com/cotes2020/chirpy-starter
+[use-starter]: https://github.com/cotes2020/chirpy-starter/generate
+[workflow]: https://github.com/cotes2020/jekyll-theme-chirpy/blob/master/.github/workflows/pages-deploy.yml.hook
+[chirpy-4.1.0]: https://github.com/cotes2020/jekyll-theme-chirpy/releases/tag/v4.1.0
+[pages-src]: https://docs.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+[latest-tag]: https://github.com/cotes2020/jekyll-theme-chirpy/tags

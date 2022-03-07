@@ -1,16 +1,15 @@
 ---
-title: &title 利用labelme制作coco格式的实例分割数据集
+title: 利用labelme制作coco格式的实例分割数据集
 excerpt: 该数据集适用于mmdetection2.0中的mask部分
 categories: [""]
 tags: 
 date: 2022-03-04T01:42:07+800
-header:
-  overlay_image: /assets/images/unsplash-image-1.jpg
-toc_label: *title
 last_modified_at: 
 ---
 
 # 1. Introdution
+
+利用labelme制作coco格式的实例分割数据集，该数据集适用于mmdetection2.0中的mask部分。
 
 在mmdetection2.0框架下，利用coco格式的数据集进行实例分割默认只需要train2017和val2017两部分（当然也可以将test中的目录修改成test2017，但没必要。）
 
