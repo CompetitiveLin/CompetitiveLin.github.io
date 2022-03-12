@@ -1,6 +1,6 @@
 ---
 title: 申请软著的时间周期记录以及注意事项
-categories: [Software Copyright]
+categories: [Tutorial, Software Copyright]
 tags: [copyright, timeline]
 date: 2022-03-11T20:01:10+800
 last_modified_at: 
