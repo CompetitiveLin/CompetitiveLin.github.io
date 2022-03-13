@@ -1,0 +1,171 @@
+---
+title: STL(Standard Template Library)常见的使用
+categories: []
+tags: [stl, c++]
+date: 2022-03-13T17:33:45+800
+last_modified_at: 
+pin: false
+---
+
+```c++
+include<bits/stdc++.h>
+
+getline(cin,s);
+
+int a;                           // int to string
+string str = to_string(a);     
+
+string b;                        // string to int
+int int1 = atoi(b.c_str());      //遇到字母会自动停下，如果没有数字，则定义为0 。b为string类型的情况下还需要使用c_str()函数
+int int2 = stoi(b);              //遇到字母会自动停下，如果没有数字，运行会出错
+
+string str;                      // length(string)
+int res = str.length();
+
+char *test;                      // length(char)
+int res = strlen(test);
+
+struct person{                   // structure
+ double a;
+ double b;
+}temp[100];
+
+mystring.substr(5,3);
+
+
+cout<<fixed<<setprecision(1)<<a<<endl;  // accurate to 1 decimal place
+
+cout<<setw(3)<<setfill('0')<<a<<endl;    // filled with '0'
+printf("%03d",a);   //  if a=1;   输出001
+
+
+//dec，hex，oct   十进制，十六进制，八进制
+         
+cout<<left<<setw(5)<<10<<endl;        // 左对齐  
+cout<<right<<setw(5)<<10<<endl;       // 右对齐
+
+*min_element(f.begin(),e.end());
+*max_element(f.begin(),f.end());
+
+string a; 
+int b,c;
+scanf("%s : %d :%d",&a[0],&b,&c);     //可以隔着冒号取值,记得引用符号&
+printf("%s\n",a);
+
+preorder:(前序) 根结点->前序遍历左子树->前序遍历右子树 （第一个为根结点）
+inorder:(中序) 中序遍历左子树->根结点->中序遍历右子树
+postorder:(后序) 后序遍历左子树->后序遍历右子树->根结点 （最后一个为根结点）
+
+
+sort(a,a+n,cmp);
+
+```
+
+
+
+
+
+
+Vector:
+```c++
+vector<int> myvector(100);   //近似但不等同于myarray[100];
+
+myvector.front()
+myvector.back()
+myvector.size()
+
+myvector.begin()
+myvector.end()
+
+for(vector<int>::iterator it = myvector.begin();it!=myvector.end();it++){
+ cout<<*it<<endl;
+}
+
+myvector.clear()
+
+myvector.pop_back()
+myvector.push_back()
+
+myvector.empty()
+
+myvector.insert()
+
+Vector<int>::iterator it;
+It = myvector.begin()
+myvector(it +2, 2 , 400)
+```
+
+
+```c++
+
+myqueue.push()
+myqueue.pop()
+myqueue.empty()
+myqueue.size()
+myqueue.front()
+myqueue.back()
+
+
+Stack:
+mystack.empty()
+mystack.pop()
+mystack.push()
+mystack.size()
+mystack.top()  //栈顶，即出入口
+
+个人认为list可以替代stack和queue。
+
+List:
+mylist.front()
+mylist.back()
+mylist.begin()
+mylist.end()
+mylist.empty()
+
+mylist.erase()
+mylist.remove()
+
+mylist.insert()
+
+mylist.pop_back()
+mylist.pop_front()
+mylist.push_back()
+mylist.push_front()
+
+mylist.reverse()
+mylist.sort()
+
+mylist.unique()
+
+
+
+Map:
+// 不需要对key进行排列或数据量不小于10000的时候，用unordered_map.
+
+unordered_map<char,int> mymap;
+mymap['a'] = 100;
+mymap['b'] = 200;
+
+for(map<char,int>::iterator it = mymap.begin();it != mymap.end(); it++){
+cout<<it->first<<" => " <<it->second<<endl;}
+
+mymap.size()
+
+mymap.clear()
+
+mymap.count(k)  //return 1 if found or 0 otherwise
+
+mymap.erase(iterator position)/
+erase(iterator first,iterator last)
+
+it = mymap.find('b')
+mymap.insert()
+
+
+bool is_prime(int s){
+ if(s <= 3) return s > 1;
+ int sqt = sqrt(s);
+ for(int i = 2; i <= sqt; i++)  if(s % i == 0) return false;
+ return true;
+}
+```
