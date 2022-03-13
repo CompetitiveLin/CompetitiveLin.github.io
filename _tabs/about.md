@@ -14,9 +14,9 @@ My research interests are ...
 
 ## Education
 
-- <div><span style="float:right">September 2022 - June 2025</span> <b>M.E. Software Engineering, East Normal University of China</b> </div>
+- <div><span style="float:right">September 2022 - June 2025(expected)</span> <b>M.E. Software Engineering, East Normal University of China</b> </div>
 
-  - Haven't started
+  - Expected to graduate in June 2025
 
 
 - <div><span style="float:right">September 2018 - June 2022</span> <b>B.E. Computer Science, Zhejiang University of Technology</b> </div>
