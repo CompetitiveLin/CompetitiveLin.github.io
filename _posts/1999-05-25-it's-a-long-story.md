@@ -4,7 +4,7 @@ categories: [Tutorial, Jekyll]
 tags: [getting started, syntax]
 date: 1999-05-25T10:00:00+800
 last_modified_at: 2022-03-07T20:55:16+800
-pin: false
+pin: true
 ---
 
 This post is to show Markdown syntax rendering on [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy), you can also use it as an example of writing. Now, let's start looking at text and typography.
