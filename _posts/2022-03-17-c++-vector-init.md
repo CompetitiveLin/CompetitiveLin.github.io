@@ -96,11 +96,17 @@ cout<<myv.size()<<endl; // 正确，因为向量有size()函数
 vector<int> temp(2);
 myv.push_back(temp);    // 正确，可以将向量插入到向量中
 ```
+**或者：**
+```c++
+vector<vector<int> > myv(5);    // 两个维度都是向量，只是第二个维度的向量长度为0
+cout<<myv.size()<<endl;         // 5
+cout<<myv[0].size()<<endl;      // 0
+```
 
 ### 2. 数组 + 向量（不建议）
 
 ```c++
-vector<int> myv[n] // 此时第一维是数组，第二维才是向量。
+vector<int> myv[n]; // 此时第一维是数组，第二维才是向量。
 // cout<<myv.size()<<endl; // 错误，因为数组没有size()函数
 
 vector<int> temp(2);
