@@ -62,8 +62,8 @@ b.insert(b.begin(), a, a + 6);
 ```
 此外，insert还可以插入m个值为n的元素
 ```c++
-//在b开始位置处插入6个6
-b.insert(b.begin(), 6, 6);
+//在b开始位置处插入3个6
+b.insert(b.begin(), 3, 6);
 ```
 
 ### 6. 通过copy函数赋值
