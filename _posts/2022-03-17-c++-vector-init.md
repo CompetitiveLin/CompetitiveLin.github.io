@@ -1,6 +1,6 @@
 ---
 title: C++中vector的初始化及赋值方式
-categories: [Syntax, C++]
+categories: [C++]
 tags: [c++, vector]
 date: 2022-03-17T19:39:44+800
 last_modified_at: 
