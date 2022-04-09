@@ -32,8 +32,17 @@ Nested and mixed lists are an interesting beast[^1]. It's a corner case to make 
 ## Ordered list
 
 1. Firstly
+    1. Firstly
+    2. Secondly
+    3. Thirdly
 2. Secondly
+    1. Firstly
+    2. Secondly
+    3. Thirdly
 3. Thirdly
+    1. Firstly
+    2. Secondly
+    3. Thirdly
 
 ## Unordered list
 
