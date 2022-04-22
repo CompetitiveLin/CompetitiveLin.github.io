@@ -44,7 +44,7 @@ gem install bundler
 
 ```console
 jekyll -v
-bunlder -v
+bundle -v
 ```
 
 输出版本信息则代表安装没问题。
