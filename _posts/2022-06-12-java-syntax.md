@@ -31,7 +31,7 @@ pin: true
 
 
 
-# 容器
+# 容器(集合类)
 
 ![](/images/posts/2022-06-19-22-51-30.png)
 
@@ -45,11 +45,63 @@ Queue<String> queue = new LinkedList<>();   // queue
 
 PriorityQueue<Integer> queue = new PriorityQueue<>();   // priority queue
 
-Map<String, Object> map = new HashMap<>();  // map
+// Set
 
+HashSet<String> unordered_set = new HashSet<>();  // 乱序，底层使用散列函数
 
+LinkedHashSet<String> set2 = new LinkedHashSet<>(); // 以插入顺序排序
+
+TreeSet<String> set = new TreeSet<>();  // 以字典序排序，底层使用红黑树
+
+// Map
+
+HashMap<String, Object> unordered_map = new HashMap<>();  // 乱序
+
+LinkedHashMap<Integer, Integer> map = new LinkedHashMap<>();  // 以插入顺序排序
+
+TreeMap<Integer, Integer> map = new TreeMap<>();  // 以字典序排序
+
+TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>();  // 手动加泛型，多一些约束少一些出错。在运行期没有任何区别, java的泛型只在编译期有效。
 
 ```
+
+**ArrayList:**
+
+```java
+public static void main(String[] args) {
+    ArrayList<String> sites = new ArrayList<String>();
+    sites.add("Google");
+    sites.add("Runoob");
+    sites.add("Taobao");
+    sites.add("Weibo");
+    System.out.println(sites.get(1));  // 访问第二个元素
+    sites.set(2, "Wiki"); // 第一个参数为索引位置，第二个为要修改的值
+    sites.remove(3); // 删除第四个元素
+    Collections.sort(sites);  // 字母排序
+    System.out.println(sites);
+    String[] arr = new String[sites.size()];    // 创建一个新的 String 类型的数组
+    sites.toArray(arr); // 将ArrayList对象转换成数组
+}
+
+```
+
+# 赋值和new的区别
+
+赋值是创建常量，在编译期时就被确定了；new创建的对象不是常量，无法在编译期中确定。
+
+![](/images/posts/2022-06-20-23-26-39.png)
+
+```java
+
+String s0 = "aaa" + "bbb";   // 常量，同"aaabbb"，放入常量池中。创建了1个对象
+String s1 = "aaa" + new String("bbb");  //  非常量，因为new出来的字符串无法在编译期中确定。创建了4个对象
+String s2 = new String("aaabbb");   // 同上。由于常量池中已经存在"aaabbb"，因此只创建了1个对象
+System.out.println(s1.intern() == s0);  // true，intern()函数会在常量池里找是否相同的字符串，有则返回常量池的引用
+System.out.println(s2.intern() == s0);  // true，同上
+System.out.println(s0 == s1);   // false，虽然内容一样，但是new出来的地址肯定不一样
+System.out.println(s1 == s2);   // false，同上
+```
+
 
 
 # JAVA只有值传递，没有引用传递
