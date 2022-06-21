@@ -82,8 +82,29 @@ public static void main(String[] args) {
     String[] arr = new String[sites.size()];    // 创建一个新的 String 类型的数组
     sites.toArray(arr); // 将ArrayList对象转换成数组
 }
-
 ```
+
+**Map:**
+
+```java
+public static void main(String[] args) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("name", "luna");
+    map.put("age", 20);
+    for (Map.Entry<String, Object> entry : map.entrySet()) {
+        System.out.println("map容器的key为：" + entry.getKey() + "对应的value值为—" + entry.getValue());
+    }
+    for (String string : map.keySet()) {
+        System.out.println("map容器的key为：" + string + "对应的value值为—" + map.get(string));
+    }
+    Iterator<String> iterators = map.keySet().iterator();
+    while (iterators.hasNext()) {
+        String key = iterators.next();
+        System.out.println("map容器的key为：" + key + "对应的value值为—" + map.get(key));
+    }
+}
+```
+
 
 # 赋值和new的区别
 
