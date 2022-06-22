@@ -39,9 +39,9 @@ pin: true
 
 ```java
 
-Deque<Integer> stack = new LinkedList<>();  // stack
+Deque<Integer> stack = new ArrayDeque<>();  // stack
 
-Queue<String> queue = new LinkedList<>();   // queue
+Deque<String> queue = new ArrayDeque<>();   // queue
 
 PriorityQueue<Integer> queue = new PriorityQueue<>();   // priority queue
 
@@ -78,32 +78,69 @@ public static void main(String[] args) {
     sites.set(2, "Wiki"); // 第一个参数为索引位置，第二个为要修改的值
     sites.remove(3); // 删除第四个元素
     Collections.sort(sites);  // 字母排序
+    System.out.println(sites.isEmpty());    // 空判断
     System.out.println(sites);
     String[] arr = new String[sites.size()];    // 创建一个新的 String 类型的数组
     sites.toArray(arr); // 将ArrayList对象转换成数组
 }
 ```
 
-**Map:**
+**LinkedList:**
+
+```java
+
+```
+
+**HashMap:**
 
 ```java
 public static void main(String[] args) {
-    Map<String, Object> map = new HashMap<>();
-    map.put("name", "luna");
-    map.put("age", 20);
-    for (Map.Entry<String, Object> entry : map.entrySet()) {
-        System.out.println("map容器的key为：" + entry.getKey() + "对应的value值为—" + entry.getValue());
+    Map<String, Integer> numbers = new HashMap<>();
+    numbers.put("One", 1);
+    numbers.put("Two", 2);
+    numbers.put("Three", 3);
+    numbers.put("Four", 4);
+    System.out.println(numbers.getOrDefault("Five", 0));
+    numbers.remove("Two");
+    numbers.replace("One",111);
+    System.out.println(numbers);
+    System.out.println(numbers.containsKey("Four"));
+    System.out.println(numbers.containsValue(111));
+    for (Map.Entry<String, Integer> entry : numbers.entrySet()) {
+        System.out.println("key:" + entry.getKey() + ".value:" + entry.getValue());
     }
-    for (String string : map.keySet()) {
-        System.out.println("map容器的key为：" + string + "对应的value值为—" + map.get(string));
+    for (String string : numbers.keySet()) {
+        System.out.println("key:" + string + ".value:" + numbers.get(string));
     }
-    Iterator<String> iterators = map.keySet().iterator();
+    Iterator<String> iterators = numbers.keySet().iterator();
     while (iterators.hasNext()) {
         String key = iterators.next();
-        System.out.println("map容器的key为：" + key + "对应的value值为—" + map.get(key));
+        System.out.println("key:" + key + ".value:" + numbers.get(key));
     }
 }
 ```
+
+**ArrayDeque：**
+
+```java
+public static void main(String[] args) {
+    ArrayDeque<String> animals= new ArrayDeque<>();
+    animals.add("Dog"); // 队尾
+    animals.addFirst("Cat");    // 队首
+    animals.offer("Horse"); // 队尾
+    animals.offerFirst("Monkey");    // 队首
+    System.out.println("第一个元素： " + animals.peek());
+    System.out.println("最后一个元素： " + animals.peekLast());
+    System.out.println("第一个元素： " + animals.poll()); // 返回并删除队首元素
+    System.out.println("最后一个元素： " + animals.pollLast());    // 返回并删除队尾元素
+    System.out.println("是否包含Dog： " + (animals.contains("Dog") ? "是" : "否"));    // 判断是否包含某个元素
+    System.out.println("ArrayDeque: " + animals);
+}
+```
+
+
+
+
 
 
 # 赋值和new的区别
