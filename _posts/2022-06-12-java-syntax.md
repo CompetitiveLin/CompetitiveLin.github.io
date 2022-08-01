@@ -230,3 +230,11 @@ public static void main(String[] args) {
 熟悉Swing的都知道： 现有的一些 model 的类里面用了 Vector，假如你去定制它们，有时不可避免要用到 Vector。
 
 
+# StringBuilder
+
+与StringBuffer相比，StringBuilder不是线程安全，所以单线程情况下效率更高。两者除线程安全方面之外无差别。
+
+```java
+StringBuilder sb = new StringBuilder();
+sb.append("a".repeat(100)); // repeat方法用于构造重复String
+```
