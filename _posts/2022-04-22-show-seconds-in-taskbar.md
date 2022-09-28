@@ -1,7 +1,7 @@
 ---
-title: Windows10任务栏时间显示秒
-categories: [Tutorial, Windows10 Installation]
-tags: [installation, windows10]
+title: Windows任务栏时间显示秒
+categories: [Tutorial, Windows 10]
+tags: [skills, windows 10]
 date: 2022-04-22T18:17:37+800
 last_modified_at: 
 pin: false

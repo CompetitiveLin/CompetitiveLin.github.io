@@ -1,7 +1,7 @@
 ---
 title: Windows配置Jekyll相关环境
 categories: [Tutorial, Jekyll]
-tags: [getting started, windows, installation]
+tags: [getting started, windows 10, installation]
 date: 2022-03-01T21:40:53+800
 last_modified_at: 2022-03-07T20:55:16+800
 pin: false
@@ -57,7 +57,7 @@ bundle -v
 ```console 
 jekyll new testblog
 cd testblog
-jekyll serve
+bundle exec jekyll serve
 ```
 
 **大功告成！**
