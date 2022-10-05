@@ -143,6 +143,7 @@ public static void main(String[] args) {
         *****Common*****
     */
     System.out.println("判断是否包含Dog： " + (animals.contains("Dog") ? "是" : "否"));
+    System.out.println("转换成数组输出： " + Arrays.toString(animals.toArray()));
 }
 ```
 
