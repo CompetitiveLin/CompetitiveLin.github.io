@@ -125,18 +125,24 @@ public static void main(String[] args) {
 ```java
 public static void main(String[] args) {
     ArrayDeque<String> animals= new ArrayDeque<>();
-    animals.add("Dog"); // 队尾
-    animals.addFirst("Cat");    // 队首
-    animals.offer("Horse"); // 队尾
-    animals.offerFirst("Monkey");    // 队首
-    animals.push("Pig");            // 队首
-    System.out.println("第一个元素： " + animals.pop()); // 返回并删除队首元素
-    System.out.println("第一个元素： " + animals.peek());   // 返回队首元素，不删除
-    System.out.println("最后一个元素： " + animals.peekLast()); // 返回队尾元素，不删除
-    System.out.println("第一个元素： " + animals.poll()); // 返回并删除队首元素
-    System.out.println("最后一个元素： " + animals.pollLast());    // 返回并删除队尾元素
-    System.out.println("是否包含Dog： " + (animals.contains("Dog") ? "是" : "否"));    // 判断是否包含某个元素
-    System.out.println("ArrayDeque: " + animals);
+    /*
+        *****Stack*****
+    */
+    animals.push("Pig");
+    System.out.println("返回栈顶元素： " + animals.peek());
+    System.out.println("返回栈顶元素并弹出： " + animals.pop()); 
+
+    /*
+        *****Queue*****
+    */
+    animals.add("Dog");
+    animals.offer("Horse");
+    System.out.println("返回出队元素： " + animals.peek()); 
+    System.out.println("返回出队元素并弹出： " + animals.poll());
+    /*
+        *****Common*****
+    */
+    System.out.println("判断是否包含Dog： " + (animals.contains("Dog") ? "是" : "否"));
 }
 ```
 
