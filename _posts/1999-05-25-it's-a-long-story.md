@@ -6,7 +6,7 @@ date: 1999-05-25T10:00:00+800
 last_modified_at: 2022-05-21T14:32:43+800
 pin: true
 image:
-  src: /images/header/devices-mockup.png
+  path: /images/header/devices-mockup.png
 ---
 
 This post is to show Markdown syntax rendering on [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy), you can also use it as an example of writing. Now, let's start looking at text and typography.
