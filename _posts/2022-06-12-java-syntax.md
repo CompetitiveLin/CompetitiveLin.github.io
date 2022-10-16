@@ -103,15 +103,26 @@ public static void main(String[] args) {
     System.out.println(numbers.getOrDefault("Five", 0));
     numbers.remove("Two");
     numbers.replace("One",111);
-    System.out.println(numbers);
     System.out.println(numbers.containsKey("Four"));
     System.out.println(numbers.containsValue(111));
+    
+    // Method A(Recommended!)
+    numbers.forEach((k,v) -> System.out.println("Item: " + k + " Count: " + v));
+    numbers.forEach((k,v) -> {
+        System.out.println("Item: " + k + " Count: " + v);
+        if("Four".equals(k)){
+            System.out.println("Hello Four");
+        }
+    });
+    // Method B(Recommended!)
     for (Map.Entry<String, Integer> entry : numbers.entrySet()) {
         System.out.println("key:" + entry.getKey() + ".value:" + entry.getValue());
     }
+    // Method C(NOT Recommended!)
     for (String string : numbers.keySet()) {
         System.out.println("key:" + string + ".value:" + numbers.get(string));
     }
+    // Method D(Recommended When Deleting)
     Iterator<String> iterators = numbers.keySet().iterator();
     while (iterators.hasNext()) {
         String key = iterators.next();
