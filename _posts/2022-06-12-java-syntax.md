@@ -49,7 +49,7 @@ PriorityQueue<Integer> queue = new PriorityQueue<>();   // priority queue
 
 HashSet<String> unordered_set = new HashSet<>();  // 乱序，底层使用散列函数
 
-LinkedHashSet<String> set2 = new LinkedHashSet<>(); // 以插入顺序排序
+LinkedHashSet<String> set = new LinkedHashSet<>(); // 以插入顺序排序
 
 TreeSet<String> set = new TreeSet<>();  // 以字典序排序，底层使用红黑树
 
@@ -90,6 +90,20 @@ public static void main(String[] args) {
 ```java
 
 ```
+
+**HashSet:**
+
+```java
+public static void main(String[] args) {
+    HashSet<Integer> set = new HashSet<Integer>();
+    set.add(1);
+    set.add(2);
+    set.add(3);
+    set.remove(2);
+    System.out.println(set.contains(4));
+}
+```
+
 
 **HashMap:**
 
@@ -133,6 +147,10 @@ public static void main(String[] args) {
 
 **ArrayDeque：**
 
+在堆栈中，元素从栈顶插入，从栈顶弹出
+
+在队列中，元素从队尾插入，从队首弹出
+
 ```java
 public static void main(String[] args) {
     ArrayDeque<String> animals= new ArrayDeque<>();
@@ -146,10 +164,20 @@ public static void main(String[] args) {
     /*
         *****Queue*****
     */
-    animals.add("Dog");
     animals.offer("Horse");
-    System.out.println("返回出队元素： " + animals.peek()); 
-    System.out.println("返回出队元素并弹出： " + animals.poll());
+    System.out.println("返回队首元素： " + animals.peek()); 
+    System.out.println("返回队首元素并弹出： " + animals.poll());
+
+    /*
+        *****Deque*****
+    */
+    animals.push("Bird");    // 队首
+    animals.offer("Dog");    // 队尾
+    System.out.println("返回队首元素： " + animals.peek()); 
+    System.out.println("返回队首元素并弹出： " + animals.poll());
+    System.out.println("返回队尾元素： " + animals.peekLast()); 
+    System.out.println("返回队尾元素并弹出： " + animals.pollLast());
+    
     /*
         *****Common*****
     */
