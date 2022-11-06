@@ -11,9 +11,9 @@ pin: false
 
 版权中心官网链接：<https://www.ccopyright.com.cn/>。
 
-在没有加急的情况下，申请一篇软著的总体周期大概需要三四个月左右。如果时间紧迫，可以去某宝找机构加急办理。
+在没有加急的情况下，申请一篇软著的总体周期大概需要三四个月左右。如果时间紧迫，可以去某宝找机构加急办理（不建议）。
 
-另外，申请软著可能用到的模板材料放到文末的附件中，有需要自取。
+另外，申请软著可能用到的模板材料放到文末的**附件**中，有需要自取。
 
 ## Timeline
 
@@ -58,6 +58,6 @@ _第三篇软著时间线_
 
 ## Attachment
 
-1. [Attachment](/assets/attachment/Software_copyright.zip)
+1. [模板材料](/assets/attachment/Software_copyright.zip)
 
-2. [External Link](https://github.com/AlexanderZhou01/China-software-copyright)
+2. [外部链接](https://github.com/AlexanderZhou01/China-software-copyright)
