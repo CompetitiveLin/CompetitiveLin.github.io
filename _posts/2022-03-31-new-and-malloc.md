@@ -58,6 +58,87 @@ pin: false
 
 - 而malloc分配内存后，如果发现内存不够用，可以通过realloc函数来扩张内存大小，realloc会先判断当前申请的内存后面是否还有足够的内存空间进行扩张，如果有足够的空间，那么就会往后面继续申请空间，并返回原来的地址指针；否则realloc会在另外有足够大小的内存申请一块空间，并将当前内存空间里的内容拷贝到新的内存空间里，最后返回新的地址指针。
 
+## Code
+
+以下是 `vector`, `vector with reserve`, `array`, `malloc`, `new` 这几种不同创建并销毁数据的方法的运行时间对比代码。
+
+根据运行结果可以大致得到：$T_{array} \approx T_{malloc} \approx T_{new} < T_{vector-with-reserve} < T_{vector}$
+
+```c++
+#include<bits/stdc++.h>
+#include <windows.h>
+using namespace std;
+
+int main(){
+	cout<<"=====Runing time of program=====" <<endl;
+	// vector	
+	DWORD start = GetTickCount();
+	int t = 100;
+	int n = 200000;
+	while (t)
+	{
+		vector<int> a;
+		for(int i=0;i<n;i++) a.push_back(i);
+		t--;
+	}
+	cout<<"Vector: "<<GetTickCount() - start<<endl;
+
+	// vector with reserve
+	start = GetTickCount();
+	t = 100;
+	n = 200000;
+	while (t)
+	{
+		vector<int> b;
+		b.reserve(n);
+		for(int i=0;i<n;i++) b.push_back(i);
+		t--;
+	}
+	cout<<"Vector with reserve: "<<GetTickCount() - start<<endl;
+
+	// array
+	start = GetTickCount();
+	t = 100;
+	n = 200000;
+	while (t)
+	{
+		int a[200000];
+		for(int i=0;i<n;i++) a[i]=i;
+		t--;
+	}
+	cout<<"Array: "<<GetTickCount() - start<<endl;
+
+
+	// malloc
+	start = GetTickCount();
+	t = 100;
+	n = 200000;
+	while (t)
+	{
+		int *p = (int *)malloc((n+1) * sizeof(int));
+		for(int i=0;i<n;i++) p[i]=i;
+		free(p);
+		t--;
+	}
+	cout<<"Malloc: "<<GetTickCount()-start<<endl;
+	
+	
+	// new
+	start = GetTickCount();
+	t = 100;
+	n = 200000;
+	while (t)
+	{
+		int *p=new int[n+1];
+		for(int i=0;i<n;i++) p[i]=i;
+		delete []p;
+		t--;
+	}
+	cout<<"New: "<<GetTickCount() - start<<endl;
+	
+}
+```
+
 ## Conclusion
 
 ![](/images/posts/2022-03-31-19-02-51.png)
