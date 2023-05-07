@@ -1,6 +1,6 @@
 ---
-title: JAVA知识点记录博客
-categories: [JAVA]
+title: Java知识点记录博客
+categories: [Backend, Java]
 tags: [java, syntax]
 date: 2022-06-12T23:14:04+800
 last_modified_at: 
@@ -210,7 +210,7 @@ System.out.println(s1 == s2);   // false，同上
 
 
 
-# JAVA只有值传递，没有引用传递
+# Java只有值传递，没有引用传递
 
 SEE [HERE](http://www.itwanger.com/java/2020/01/03/java-string-reference-pass.html)
 

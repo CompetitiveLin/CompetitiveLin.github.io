@@ -1,5 +1,5 @@
 ---
-title: 线段树（JAVA实现）
+title: 线段树（Java实现）
 categories: [Algorithm]
 tags: [segment tree]
 date: 2022-07-05T14:13:29+800
