@@ -7,6 +7,42 @@ last_modified_at:
 pin: false
 ---
 
+Spring核心之控制反转（IOC）和依赖注入（DI）：
+- **IOC是一种设计思想**，将设计好的Bean对象交给容器控制，而不是在传统的在对象内部直接控制。用@Configutation + @Bean的方式。用通俗的话解释就是在容器里创建Bean对象，在需要的时候取出使用即可。
+- **DI是一种实现方式**，将应用程序依赖的对象注入到容器中。
+
+
+Spring创建Bean的三步（由反射创建的）：
+- 实例化，`AbstractAutowireCapableBeanFactory` 的 `createBeanInstance` 方法
+- 属性注入，`AbstractAutowireCapableBeanFactory` 的 `populateBean` 方法
+- 初始化，`AbstractAutowireCapableBeanFactory` 的 `initializeBean` 方法
+
+Spring启动时先扫描所有Bean信息，BeanDefinition存储日常给Spring Bean定义的元数据。然后存储BeanDefinition的BeanDefinitionMap，是根据字典序依次创建Bean对象。
+
+[三级缓存解决循环依赖](https://developer.aliyun.com/article/766880)：
+- 前提，出现循环依赖的Bean必须是单例；依赖注入的方式不能全是构造器注入（全是构造器注入则无法解决循环依赖）。
+- getSingleton(beanName)方法三级缓存
+  1. singletonObjects，一级缓存，存储的是所有创建好了的**单例Bean对象**
+  2. earlySingletonObjects，二级缓存，完成实例化，但是还未进行属性注入及初始化的**提前暴露的对象**
+  3. singletonFactories，三级缓存，存放**生产对象的工厂**，并且每次从这个工厂中拿到的对象都是不一样的，二级缓存中存储的就是从这个工厂中获取到的对象，如果Bean存在AOP的话，返回的是AOP的**代理对象**，提前进行了代理，避免对后面重复创建代理对象。
+
+![](https://raw.githubusercontent.com/CompetitiveLin/ImageHostingService/picgo/imgs/202305231628567.png)
+
+
+为什么需要二级缓存：
+如果出现循环依赖+aop时，多个地方注入这个动态代理对象需要保证都是同一个对象。如果只使用这两层缓存，在使用三级缓存中的工厂对象生成的动态代理对象都是新创建的，循环依赖的时候，注入到别的bean里面去的那个动态代理对象和最终这个bean在初始化后自己创建的bean地址值不一样。如果 Spring 选择二级缓存来解决循环依赖的话，那么就意味着所有 Bean 都需要在实例化完成之后就立马为其创建代理，而 Spring 的设计原则是在 Bean 初始化完成之后才为其创建代理。所以，Spring 选择了三级缓存。但是因为循环依赖的出现，导致了 Spring 不得不提前去创建代理，因为如果不提前创建代理对象，那么注入的就是原始对象，这样就会产生错误。
+
+
+Prototype（原型）对象和单例对象的区别：
+- 单例对象在Spring加载的时候就创建，创建完毕后放入一级缓存中
+- 而原型对象在每次在需要的时候都会创建，并且也不会存入缓存中
+- 单例Bean对象的劣势：线程不安全。解决方案：考虑ThreadLocal
+
+为什么Springboot默认创建单例Bean：
+- 不需要多次创建实例
+- 减少垃圾回收
+- 缓存中可以快速获得
+
 
 [容器注册组件的四种方式](https://juejin.cn/post/6989944803874062366)：
 1. @Configuration + @Bean，注意，使用这种注册方法 Spring 会通过 CGLIB 来增强这个类，会判断是否实例已经存在，多次调用只会生成一个实例，意味着在@Configuration中的@Bean生成的是单例；相比之下，在@Component类中使用@Bean注解时，并不会有这种增强的行为。也就是说，当你在@Component类中调用一个@Bean方法时，实际上就是直接调用这个方法，并且每次调用都会创建一个新的 Bean，也就是说是生成多实例。
@@ -24,6 +60,7 @@ pin: false
 3. doAfterReturning(String result) / doAfterThrowing(Exception e)
 4. doAfter()
 5. doAround(ProceedingJoinPoint pjp)的 pjp.proceed()**后**的内容（当且仅当非异常情况下才会执行）
+
 
 
 
