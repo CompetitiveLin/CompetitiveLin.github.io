@@ -14,6 +14,17 @@ pin: false
 3. @Import
 4. 新建一个实现FactoryBean接口的类
 
+[面向切面编程（AOP）](https://pdai.tech/md/spring/spring-x-framework-aop.html)也是一种设计思想，本质是为了解耦。其实现方式是动态织入，在运行时动态将要增强的代码织入到目标类中，借助动态代理技术完成的。并且接口与非接口的动态代理机制并不相同，如下所示：
+- 接口使用JDK代理
+- 非接口使用CGlib代理
+
+执行顺序：
+1. doAround(ProceedingJoinPoint pjp)的 pjp.proceed()**前**的内容
+2. doBefore()
+3. doAfterReturning(String result) / doAfterThrowing(Exception e)
+4. doAfter()
+5. doAround(ProceedingJoinPoint pjp)的 pjp.proceed()**后**的内容（当且仅当非异常情况下才会执行）
+
 
 
 注解：
@@ -22,5 +33,5 @@ pin: false
 
 - @SpringBootApplication 包含三个注解：
   1. @SpringBootConfiguration, 继承@Configuration，标注当前类是配置类，并会将当前类内声明的一个或多个以@Bean注解标记的方法的实例注册到spring容器中，并且实例名就是方法名。
-  2. [@EnableAutoConfiguration](https://www.cnblogs.com/kevin-yuan/p/13583269.html)，继承了 @Import，将特定路径（org.springframework.boot.autoconfigure.EnableAutoConfiguration）中所有符合自动配置条件（@Configuration）的类加载到Ioc容器。
+  2. [@EnableAutoConfiguration](https://www.cnblogs.com/kevin-yuan/p/13583269.html)，继承了 @Import，将特定路径（org.springframework.boot.autoconfigure.EnableAutoConfiguration）中所有符合自动配置条件（@Configuration）的类加载到Ioc容器。`AutoConfigurationImportSelector.java` 中可以看到所有自动配置类的名称。[自动配置类原理](https://juejin.cn/post/7101477895331135495)
   3. @ComponentScan，自动扫描并加载被@Component或@Repository修饰的组件，最终将这些组件加载到容器中，默认路径是该注解所在类的package。
