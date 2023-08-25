@@ -28,4 +28,27 @@ Elasticsearch是基于 Lucene 架构实现的分布式、海量数据的存储�
 
 查询语句的filter比bool的效率高！
 
+Reindex 重建索引的原理：
+
+Scroll Query + Bulk
+
 Ingest pipeline 可以在数据存入ES之前对数据进行转换，例如转小写，增加字段等。
+
+### 数据写入原理
+
+大概分为三个步骤：write -> refresh -> flush
+
+1、write：文档数据到内存缓存，并存到 translog
+
+2、refresh：内存缓存中的文档数据，到文件缓存中的 segment 。此时可以被搜到。
+
+3、flush： 缓存中的 segment 文档数据写入到磁盘
+
+当数据添加到索引后并不能马上被查询到，等到索引刷新后才会被查询到。refresh_interval 参数设置为正数之后，需要等相应时间后才可以在es索引中搜索到，因为已经从内存缓存刷新到文件缓存中了。详见[数据写入与查询存在时间差问题](https://www.cnblogs.com/eternityz/p/17051673.html)
+
+性能优化：
+
+背景：每五分钟就有6.5M条数据，直接reindex需要1000s（15分钟）
+1. 创建索引前设置主分片数量为二，副本比例为一，700s
+2. batch size = 2000（原来为默认值1000）, 副本比例为零，480s
+3. slice = 2（其实是三个并行任务，一个父任务二个子任务），420s（甚至有一次350s）

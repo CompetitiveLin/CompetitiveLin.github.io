@@ -12,12 +12,19 @@ Spring核心之控制反转（IOC）和依赖注入（DI）：
 - **DI是一种实现方式**，将应用程序依赖的对象注入到容器中。
 
 
-Spring创建Bean的三步（由反射创建的）：
+[Spring创建Bean的三步（由反射创建的）](https://www.cnblogs.com/three-fighter/p/16007800.html)：
 - 实例化，`AbstractAutowireCapableBeanFactory` 的 `createBeanInstance` 方法
 - 属性注入，`AbstractAutowireCapableBeanFactory` 的 `populateBean` 方法
 - 初始化，`AbstractAutowireCapableBeanFactory` 的 `initializeBean` 方法
+  - 调用Aware接口（如果实现了Aware接口）
+  - postProcessBeforeInitialization
+  - afterPropertiesSet
+  - init-method
+  - postProcessAfterInitialization
 
 Spring启动时先扫描所有Bean信息，BeanDefinition存储日常给Spring Bean定义的元数据。然后存储BeanDefinition的BeanDefinitionMap，是根据字典序依次创建Bean对象。
+
+
 
 [三级缓存解决循环依赖](https://developer.aliyun.com/article/766880)：
 - 前提，出现循环依赖的Bean必须是单例；依赖注入的方式不能全是构造器注入（全是构造器注入则无法解决循环依赖）。
