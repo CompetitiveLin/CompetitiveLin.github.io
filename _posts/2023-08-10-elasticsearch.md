@@ -26,9 +26,15 @@ Elasticsearch是基于 Lucene 架构实现的分布式、海量数据的存储�
 - 当分片设置为5，数据量为30G时，ES会将数据平均分配到5个分片上，每个分片6G数据。进行数据查询时，ES会把查询发送给每个分片，最后将结果组合在一起。目的是保障查询的高效性。
 - 副本是对分片的数据进行复制，目的是保障数据的高可靠性，防止丢失。
 
-查询语句的filter比bool的效率高！
+### Filter VS Query
 
-Reindex 重建索引的原理：
+尽可能使用过滤器上下文（Filter）替代查询上下文（Query）
+- Query：此文档与此查询子句的匹配程度如何？
+- Filter：此文档和查询子句匹配吗？
+
+Elasticsearch 针对 Filter 查询只需要回答「是」或者「否」，不需要像 Query 查询一样计算相关性分数，同时Filter结果可以缓存。
+
+### Reindex 重建索引的原理：
 
 Scroll Query + Bulk
 
