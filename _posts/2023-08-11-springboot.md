@@ -79,3 +79,15 @@ Prototype（原型）对象和单例对象的区别：
   1. @SpringBootConfiguration, 继承@Configuration，标注当前类是配置类，并会将当前类内声明的一个或多个以@Bean注解标记的方法的实例注册到spring容器中，并且实例名就是方法名。
   2. [@EnableAutoConfiguration](https://www.cnblogs.com/kevin-yuan/p/13583269.html)，继承了 @Import，将特定路径（org.springframework.boot.autoconfigure.EnableAutoConfiguration）中所有符合自动配置条件（@Configuration）的类加载到Ioc容器。`AutoConfigurationImportSelector.java` 中可以看到所有自动配置类的名称。[自动配置类原理](https://juejin.cn/post/7101477895331135495)
   3. @ComponentScan，自动扫描并加载被@Component或@Repository修饰的组件，最终将这些组件加载到容器中，默认路径是该注解所在类的package。
+
+  ## Nacos 的 AP 和 CP 模式
+
+  CAP 原则：
+  - C（Consistency）：一致性
+  - A（Availability）：可用性
+  - P（Partition tolerance）：分区容错性
+
+  Nacos集群默认支持AP原则（即不支持数据一致性，支持服务注册的临时实例），但也可切换至CP原则（支持服务注册的永久实例）。
+
+临时实例和持久化实例的区别：
+- 持久化实例健康检查后会被标记为不健康，而临时实例会直接从列表中删除。

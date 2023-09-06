@@ -7,6 +7,10 @@ last_modified_at:
 pin: false
 ---
 
+# 消息队列的三大作用
+- 解耦
+- 异步
+- 削峰
 
 # [区别](https://blog.csdn.net/shijinghan1126/article/details/104724407)
 
@@ -60,7 +64,11 @@ pin: false
 - RocketMQ 支持事务，采用二阶段提交+broker定时回查。但也只能保证生产者与broker的一致性，broker与消费者之间只能单向重试。即保证的是最终一致性。
 
 ## 服务发现
-- Kafka 使用 ZooKeeper
+- Kafka 使用 ZooKeeper，但新版本使用内嵌的KRaft替代了ZooKeeper
 - RocketMQ 使用自己实现的 nameserver
 
+
+# RocketMQ
+
+## NameServer
 
