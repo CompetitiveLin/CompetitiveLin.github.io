@@ -7,6 +7,14 @@ last_modified_at:
 pin: false
 ---
 
+Spring, SpringBoot, Spring MVC 区别：
+- Spring框架(Framework)是最流行的Java应用程序开发框架。 Spring框架的主要功能是依赖项注入或控制反转(IoC)。
+- Spring MVC是Spring的一个MVC框架，包含前端视图，文件配置等。XML和config配置比较复杂。
+- Spring Boot 是为简化Spring配置的快速开发整合包，允许构建具有最少配置或零配置的独立应用程序。
+
+
+Spring的启动流程：首先定位到程序入口是 `AbstractApplicationContext#refresh`，其中包括prepareRefresh，refreshBeanFactory等十二个步骤，其作用主要是销毁存在的容器创建新容器并完成Bean的创建。
+
 Spring核心之控制反转（IOC）和依赖注入（DI）：
 - **IOC是一种设计思想**，将设计好的Bean对象交给容器控制，而不是在传统的在对象内部直接控制。用@Configutation + @Bean的方式。用通俗的话解释就是在容器里创建Bean对象，在需要的时候取出使用即可。
 - **DI是一种实现方式**，将应用程序依赖的对象注入到容器中。
@@ -28,6 +36,12 @@ refresh() 的作用：在创建IoC容器前，如果已经有容器存在，则�
 
 Spring启动时先扫描所有Bean信息，BeanDefinition存储日常给Spring Bean定义的元数据。然后存储BeanDefinition的BeanDefinitionMap，是根据字典序依次创建Bean对象。
 
+## 两种IOC容器
+
+IOC的实现原理是工厂模式加反射机制。
+
+- BeanFactory，负责配置、创建、管理Bean，使用懒加载机制，不支持国际化和基于依赖的注解
+- ApplicationContext，其拓展了BeanFactory接口，使用即时加载的机制，支持国际化和基于依赖的注解，包括AnnotationConfigApplicationContext、ClassPathXmlApplicationContext、FileSystemXmlApplicationContext等
 
 
 [三级缓存解决循环依赖](https://developer.aliyun.com/article/766880)：
@@ -86,7 +100,20 @@ Prototype（原型）对象和单例对象的区别：
   3. @ComponentScan，自动扫描并加载被@Component或@Repository修饰的组件，最终将这些组件加载到容器中，默认路径是该注解所在类的package。
 
 
-### 事务
+## 事务
+
+事务的几个参数：rollbackFor，propagation，isolation
+
 PROPAGATION_REQUIRES_NEW 和 PROPAGATION_NESTED 的区别：
 - PROPAGATION_REQUIRES_NEW：内层事务与外层事务就像两个独立的事务一样，一旦内层事务进行了提交后，外层事务不能对其进行回滚，两个事务互不影响。
 - PROPAGATION_NESTED：外层事务的回滚可以引起内层事务的回滚。而内层事务的异常并不会导致外层事务的回滚。
+
+### 事务失效
+
+1. 数据库引擎不支持（MyIsam）
+2. 没有注册成Bean被Spring管理（没有使用@Service等注解）
+3. 方法不是public或者被final修饰（无法生成代理类）
+4. [方法内部调用](https://juejin.cn/post/6844903908892999687)(解决方法是引入自身Bean)
+5. 异常被捕捉或抛出其他类型的异常（回滚的默认异常为RuntimeException）
+6. 未开启事务
+
