@@ -11,6 +11,10 @@ Spring核心之控制反转（IOC）和依赖注入（DI）：
 - **IOC是一种设计思想**，将设计好的Bean对象交给容器控制，而不是在传统的在对象内部直接控制。用@Configutation + @Bean的方式。用通俗的话解释就是在容器里创建Bean对象，在需要的时候取出使用即可。
 - **DI是一种实现方式**，将应用程序依赖的对象注入到容器中。
 
+### IoC
+
+refresh() 的作用：在创建IoC容器前，如果已经有容器存在，则需要把已有的容器销毁和关闭，以保证在refresh之后使用的是新建立起来的IoC容器。refresh的作用类似于对IoC容器的重启，在新建立好的容器中对容器进行初始化，对Bean定义资源进行载入。
+
 
 [Spring创建Bean的三步（由反射创建的）](https://www.cnblogs.com/three-fighter/p/16007800.html)：
 - 实例化，`AbstractAutowireCapableBeanFactory` 的 `createBeanInstance` 方法
@@ -58,8 +62,9 @@ Prototype（原型）对象和单例对象的区别：
 4. 新建一个实现FactoryBean接口的类
 
 [面向切面编程（AOP）](https://pdai.tech/md/spring/spring-x-framework-aop.html)也是一种设计思想，本质是为了解耦。其实现方式是动态织入，在运行时动态将要增强的代码织入到目标类中，借助动态代理技术完成的。并且接口与非接口的动态代理机制并不相同，如下所示：
-- 接口使用JDK代理
-- 非接口使用CGlib代理
+- 接口使用**JDK代理**，通过反射类Proxy以及拦截器的InvocationHandler回调接口实现的，使用反射，效率会低，不提供子类代理。
+- 非接口使用**CGlib代理**，没有接口，只有实现类，采用底层字节码增强技术ASM在运行时使用Enhancer类创建目标的子类，提供子类代理。
+
 
 执行顺序：
 1. doAround(ProceedingJoinPoint pjp)的 pjp.proceed()**前**的内容
@@ -79,3 +84,9 @@ Prototype（原型）对象和单例对象的区别：
   1. @SpringBootConfiguration, 继承@Configuration，标注当前类是配置类，并会将当前类内声明的一个或多个以@Bean注解标记的方法的实例注册到spring容器中，并且实例名就是方法名。
   2. [@EnableAutoConfiguration](https://www.cnblogs.com/kevin-yuan/p/13583269.html)，继承了 @Import，将特定路径（org.springframework.boot.autoconfigure.EnableAutoConfiguration）中所有符合自动配置条件（@Configuration）的类加载到Ioc容器。`AutoConfigurationImportSelector.java` 中可以看到所有自动配置类的名称。[自动配置类原理](https://juejin.cn/post/7101477895331135495)
   3. @ComponentScan，自动扫描并加载被@Component或@Repository修饰的组件，最终将这些组件加载到容器中，默认路径是该注解所在类的package。
+
+
+### 事务
+PROPAGATION_REQUIRES_NEW 和 PROPAGATION_NESTED 的区别：
+- PROPAGATION_REQUIRES_NEW：内层事务与外层事务就像两个独立的事务一样，一旦内层事务进行了提交后，外层事务不能对其进行回滚，两个事务互不影响。
+- PROPAGATION_NESTED：外层事务的回滚可以引起内层事务的回滚。而内层事务的异常并不会导致外层事务的回滚。
