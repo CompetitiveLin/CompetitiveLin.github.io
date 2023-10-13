@@ -4,7 +4,7 @@ categories: []
 tags: [backend]
 date: 2023-08-10T15:08:32+800
 last_modified_at: 
-pin: false
+pin: true
 ---
 
 Spring, SpringBoot, Spring MVC 区别：
@@ -117,3 +117,17 @@ PROPAGATION_REQUIRES_NEW 和 PROPAGATION_NESTED 的区别：
 5. 异常被捕捉或抛出其他类型的异常（回滚的默认异常为RuntimeException）
 6. 未开启事务
 
+### 方法调用的事务回滚情况
+
+前提：a方法调用b方法
+
+|a|b|报错情况|同类调用的现象|不同类调用的现象|
+|-|-|-|-|-|
+|transactional注解|无注解|a方法报错，b方法不报错|均回滚|均回滚|
+|transactional注解|无注解|a方法不报错，b方法报错|均回滚|均回滚|
+|无注解|transactional注解|a方法报错，b方法不报错|均不回滚|均不回滚|
+|无注解|transactional注解|a方法不报错，b方法报错|均不回滚|a不回滚，b回滚|
+
+结论：
+1. transactional注解修饰的方法会创建一个代理类，其他方法调用该注解修饰的方法也只是调用原类中的方法。
+2. transactional修饰的方法内报错就一定会回滚。

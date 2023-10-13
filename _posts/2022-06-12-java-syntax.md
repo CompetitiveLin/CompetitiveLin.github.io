@@ -31,11 +31,10 @@ pin: true
 
 
 
-# 容器(集合类)
+# [容器(集合类)](https://zhuanlan.zhihu.com/p/29421226)
 
 ![](/images/posts/2022-06-19-22-51-30.png)
 
-[HERE](https://zhuanlan.zhihu.com/p/29421226)
 
 ```java
 
