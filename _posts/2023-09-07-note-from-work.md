@@ -88,3 +88,25 @@ MongoDB 是一种 CP 数据存储——它通过牺牲可用性、保持一致�
 1. 选举超时时间（Follower拥有）：若超时前没有收到心跳包，认为Leader下线，此时Follower会变成Candidate；但反之如果接收到心跳包，则重置计时器。
 2. 投票超时时间（Candidate拥有）：若超时前没有得到半数以上的票数，则竞选失败；反之成功。
 3. 竞选等待超时时间（竞选失败的Follower拥有）：竞选失败的Follower需要等待一段时间后才能重新竞选。
+
+
+# K8s
+
+Kubernetes主要由以下几个核心组件组成：
+
+- etcd保存了整个集群的状态；
+- apiserver提供了资源操作的唯一入口，并提供认证、授权、访问控制、API注册和发现等机制；
+- controller manager负责维护集群的状态，比如故障检测、自动扩展、滚动更新等；
+- scheduler负责资源的调度，按照预定的调度策略将Pod调度到相应的机器上；
+- kubelet负责维持容器的生命周期，同时也负责Volume（CVI）和网络（CNI）的管理；
+- Container runtime负责镜像管理以及Pod和容器的真正运行（CRI）；
+- kube-proxy负责为Service提供cluster内部的服务发现和负载均衡；
+
+除了核心组件，还有一些推荐的add-ons（扩展）：
+
+- kube-dns负责为整个集群提供DNS服务
+- Ingress Controller为服务提供外网入口
+- Heapster提供资源监控
+- Dashboard提供GUI
+- Federation提供跨可用区的集群
+- Fluentd-elasticsearch提供集群日志采集、存储与查询
