@@ -89,6 +89,19 @@ MongoDB 是一种 CP 数据存储——它通过牺牲可用性、保持一致�
 2. 投票超时时间（Candidate拥有）：若超时前没有得到半数以上的票数，则竞选失败；反之成功。
 3. 竞选等待超时时间（竞选失败的Follower拥有）：竞选失败的Follower需要等待一段时间后才能重新竞选。
 
+### 脑裂
+
+由于某种原因（网络不稳定）使得主从集群一分为二，导致master或者leader节点的数量不为1（0或2）。
+
+- redis脑裂
+
+master 机器突然脱离网络，使得 sentinel 集群无法感知到 master 的存在，会重新选举一个 master 节点。网络恢复后则会存在两个 master 节点。
+
+- zookeeper脑裂
+
+脑裂可能出现平票的情况，从而无法选举出 leader。
+
+zk 中建议节点数是奇数。
 
 # K8s
 
@@ -110,3 +123,38 @@ Kubernetes主要由以下几个核心组件组成：
 - Dashboard提供GUI
 - Federation提供跨可用区的集群
 - Fluentd-elasticsearch提供集群日志采集、存储与查询
+
+# 双重校验锁实现单例模式
+
+```java
+public class Singleton {
+
+    private static volatile Singleton singleton = null; // volatile 必不可少，防止jvm指令重排优化
+
+    private Singleton() {
+    }
+
+    public static Singleton getInstance(){
+        //第一次校验singleton是否为空，为了提高代码执行效率，由于单例模式只要一次创建实例即可，所以当创建了一个实例之后，再次调用getInstance方法就不必要进入同步代码块，不用竞争锁。直接返回前面创建的实例即可。
+        if(singleton==null){
+            synchronized (Singleton.class){
+                //第二次校验singleton是否为空，防止二次创建实例
+                if(singleton==null){
+                    singleton = new Singleton();
+                }
+            }
+        }
+        return singleton;
+    }
+
+    public static void main(String[] args) {
+        for (int i = 0; i < 100; i++) {
+            new Thread(new Runnable() {
+                public void run() {
+                    System.out.println(Thread.currentThread().getName()+" : "+Singleton.getInstance().hashCode());
+                }
+            }).start();
+        }
+    }
+}
+```
