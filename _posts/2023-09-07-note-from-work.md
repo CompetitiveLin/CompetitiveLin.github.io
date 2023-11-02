@@ -158,3 +158,32 @@ public class Singleton {
     }
 }
 ```
+
+# 23种设计模式
+
+- 创建型
+    1. 单例模式（Singleton）
+    2. 原型模式（Prototype），能够复制已有对象，而又无需使代码依赖它们所属的类。例如 `Cloneable` 接口是立即可用的原型模式。 
+    3. [工厂方法模式（Factory Method）](https://refactoringguru.cn/design-patterns/factory-method/java/example)，在父类中提供一个创建对象的方法， 允许子类决定实例化对象
+    4. [抽象工厂模式（Abstract Factory）](https://refactoringguru.cn/design-patterns/abstract-factory/java/example)，定义了用于创建不同产品的**接口**， 但将实际的创建工作留给了具体工厂类。 每个工厂类型都对应一个特定的产品变体。
+    5. [建造者模式（Builder）](https://refactoringguru.cn/design-patterns/builder/java/example)，分步骤创建复杂对象。
+- 行为型
+    1. 模板方法模式（Template Method）
+    2. 责任链模式（Chain of Responsibility）
+    3. 命令模式（Command）
+    4. 迭代器模式（Iterator）
+    5. 中介者模式（Mediator）
+    6. 备忘录模式（Memeoto）
+    7. 观察者模式（Observer）
+    8. 状态模式（State）
+    9. 策略模式（Strategy）
+    10. 访问者模式（Visitor）
+    11. 解释器模式（Interpreter）
+- 结构型
+    1. 适配器模式（Adaptor）
+    2. 桥接模式（Bridge）
+    3. 组合模式（Composite）
+    4. 装饰模式（Decorator）
+    5. 外观模式（Facade）
+    6. 享元模式（Flyweight）
+    7. 代理模式（Proxy）
