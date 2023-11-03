@@ -159,7 +159,10 @@ public class Singleton {
 }
 ```
 
-# 23种设计模式
+# 23种设计模式与六大原则
+
+
+## 23种设计模式
 
 - 创建型
     1. 单例模式（Singleton）
@@ -168,7 +171,7 @@ public class Singleton {
     4. [抽象工厂模式（Abstract Factory）](https://refactoringguru.cn/design-patterns/abstract-factory/java/example)，定义了用于创建不同产品的**接口**， 但将实际的创建工作留给了具体工厂类。 每个工厂类型都对应一个特定的产品变体。
     5. [建造者模式（Builder）](https://refactoringguru.cn/design-patterns/builder/java/example)，分步骤创建复杂对象。
 - 行为型
-    1. 模板方法模式（Template Method）
+    1. 模板方法模式（Template Method），它在基类中定义了一个算法的框架，允许子类在不修改结构的情况下重写算法的特定步骤。
     2. 责任链模式（Chain of Responsibility）
     3. 命令模式（Command）
     4. 迭代器模式（Iterator）
@@ -184,6 +187,15 @@ public class Singleton {
     2. 桥接模式（Bridge）
     3. 组合模式（Composite）
     4. 装饰模式（Decorator）
-    5. 外观模式（Facade）
-    6. 享元模式（Flyweight）
+    5. 外观模式（Facade），为复杂系统、程序库或框架提供一个简单的接口。通常作用于整个对象子系统上。
+    6. 享元模式（Flyweight），共享多个对象的部分状态将内存消耗最小化。 
     7. 代理模式（Proxy）
+
+## 六大原则
+
+1. 开闭原则，对扩展开放，对修改关闭。
+2. 单一职责原则，顾名思义，一个类的职责只有有一个。
+3. 里氏替换原则，子类可以扩展父类的功能，但不能改变父类原有的功能。
+4. 依赖倒转原则，依赖于抽象，不能依赖于具体实现（面向接口编程）。
+5. 接口隔离原则，类之间的依赖关系应该建立在最小的接口上。
+6. 迪米特原则，一个软件实体应当尽可能少的与其他实体发生相互作用。
