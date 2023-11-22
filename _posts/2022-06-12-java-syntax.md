@@ -100,6 +100,9 @@ public static void main(String[] args) {
     set.add(3);
     set.remove(2);
     System.out.println(set.contains(4));
+    for(int item: set){
+        System.out.println(item);
+    }
 }
 ```
 
