@@ -68,6 +68,17 @@ pin: false
 - RocketMQ 使用自己实现的 nameserver
 
 
+## Kafka 如何保证消息的顺序性
+针对消息有序的业务需求，还分为全局有序和局部有序。已知，每个partition的消费是顺序性的，但每个topic可以有若干个partition。
+
+全局有序：一个Topic下的所有消息都需要按照生产顺序消费。
+
+解决方法：1个Topic只能对应1个Partition。
+
+局部有序：一个Topic下的消息，只需要满足同一业务字段的要按照生产顺序消费。例如：Topic消息是订单的流水表，包含订单orderId，业务要求同一个orderId的消息需要按照生产顺序进行消费。
+
+解决方法：要满足局部有序，只需要在发消息的时候指定Partition Key，Partition Key相同的消息会放在同一个Partition。
+
 # RocketMQ
 
 ## NameServer
