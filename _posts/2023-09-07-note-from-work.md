@@ -9,7 +9,7 @@ pin: false
 
 1. Grafana 的数据显示会五分钟自动补全。当向 Prometheus 中插入某个时间戳的值时，其值会延续五分钟。
 
-2. K8S 中的 Sidecar 模式：通常情况下一个 Pod 只包含一个容器，但是 Sidecar 模式是指为主容器**提供额外功能（例如监控）** 从而将其他容器加入到同一个 Pod 中。再例如[ Istio 实现 Sidecar 自动注入](https://juejin.cn/post/6951567887664414757)。
+2. K8S 中的 Sidecar 模式：通常情况下一个 Pod 只包含一个容器，但是 Sidecar 模式是指为主容器**提供额外功能（例如监控）** 从而将其他容器加入到同一个 Pod 中。再例如 [Istio 实现 Sidecar 自动注入](https://juejin.cn/post/6951567887664414757)。
 
 3. Federated cluster，联邦集群
 
@@ -17,11 +17,21 @@ pin: false
 
 5. 限流算法：漏桶和令牌桶算法，漏桶算法处理请求的速度固定，突发请求过多时会丢弃；令牌桶算法除了限制数据的平均传输速率外，还要求允许某种程度的突发传输。
 
+6. [常见 HTTP 状态码](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)：2XX，成功响应；3XX，重定向消息；4XX，客户端错误响应；5XX，服务端错误响应。
+
+7, 请求分为四部分：请求行，请求头，空行，请求正文（不一定有）。
+
 ## 常见NoSQL数据库类型
 1. 键值数据库：Redis
-2. 列式数据库：HBase, ClickHouse
+2. 列式数据库：HBase, ClickHouse，适用于联机分析处理（OLAP）场景
 3. 文档数据库：MongoDB, ElasticSearch
 4. 图数据库
+
+Clickhouse：
+
+1. 不支持事务：因为面向列。不存在隔离级别。ClickHouse的定位是分析性数据库，而不是严格的关系型数据库
+2. 不支持高并发
+3. 可处理大量读请求，数据压缩的特性
 
 
 ## ACID 原则
@@ -200,7 +210,7 @@ public class Singleton {
 5. 接口隔离原则，类之间的依赖关系应该建立在最小的接口上。
 6. 迪米特原则，一个软件实体应当尽可能少的与其他实体发生相互作用。
 
-# 协程
+## 协程
 
 简单理解：用户态的线程，上下文切换通过调用方去控制，而不是操作系统。
 
