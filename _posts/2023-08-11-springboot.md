@@ -13,7 +13,20 @@ Spring, SpringBoot, Spring MVC 区别：
 - Spring Boot 是为简化Spring配置的快速开发整合包，允许构建具有最少配置或零配置的独立应用程序。
 
 
-Spring的启动流程：首先定位到程序入口是 `AbstractApplicationContext#refresh`，其中包括prepareRefresh，refreshBeanFactory等十二个步骤，其作用主要是销毁存在的容器创建新容器并完成Bean的创建。
+## SpringBoot项目启动流程：
+- 总体来说分两部分，先初始化 SpringApplication，再运行 SpringApplication。
+
+运行 SpringApplication 又分为：
+1、获取并启动监听器
+2、根据监听器和参数来创建运行环境
+3、准备 Banner 打印器
+4、创建 Spring 容器
+5、Spring 容器前置处理（将前几步生成的监听器，Banner打印器和环境等配置到容器中）
+6、刷新容器
+7、Spring 容器后置处理（空方法）
+8、发出结束执行的事件通知
+9、返回容器
+
 
 Spring核心之控制反转（IOC）和依赖注入（DI）：
 - **IOC是一种设计思想**，将设计好的Bean对象交给容器控制，而不是在传统的在对象内部直接控制。用@Configutation + @Bean的方式。用通俗的话解释就是在容器里创建Bean对象，在需要的时候取出使用即可。
@@ -40,8 +53,8 @@ Spring启动时先扫描所有Bean信息，BeanDefinition存储日常给Spring B
 
 IOC的实现原理是工厂模式加反射机制。
 
-- BeanFactory，负责配置、创建、管理Bean，使用懒加载机制，不支持国际化和基于依赖的注解
-- ApplicationContext，其拓展了BeanFactory接口，使用即时加载的机制，支持国际化和基于依赖的注解，包括AnnotationConfigApplicationContext、ClassPathXmlApplicationContext、FileSystemXmlApplicationContext等
+- BeanFactory，只提供了实例化对象和获取对象的功能，使用懒加载机制，不支持国际化和基于依赖的注解
+- ApplicationContext，其拓展了BeanFactory接口，使用即时加载的机制，它是在Ioc启动时就一次性创建所有的Bean，支持国际化和基于依赖的注解，包括AnnotationConfigApplicationContext、ClassPathXmlApplicationContext、FileSystemXmlApplicationContext等
 
 
 [三级缓存解决循环依赖](https://developer.aliyun.com/article/766880)：
@@ -96,7 +109,9 @@ Prototype（原型）对象和单例对象的区别：
 
 - @SpringBootApplication 包含三个注解：
   1. @SpringBootConfiguration, 继承@Configuration，标注当前类是配置类，并会将当前类内声明的一个或多个以@Bean注解标记的方法的实例注册到spring容器中，并且实例名就是方法名。
-  2. [@EnableAutoConfiguration](https://www.cnblogs.com/kevin-yuan/p/13583269.html)，继承了 @Import，将特定路径（org.springframework.boot.autoconfigure.EnableAutoConfiguration）中所有符合自动配置条件（@Configuration）的类加载到Ioc容器。`AutoConfigurationImportSelector.java` 中可以看到所有自动配置类的名称。[自动配置类原理](https://juejin.cn/post/7101477895331135495)
+  2. [@EnableAutoConfiguration](https://www.cnblogs.com/kevin-yuan/p/13583269.html)，主要由 @AutoConfigurationPackage，@Import(EnableAutoConfigurationImportSelector.class)这两个注解组成的。
+    - @AutoConfigurationPackage 内部是 @({Registrar.class})，用于将启动类所在的包里面的所有组件注册到spring容器。
+    - @Import(EnableAutoConfigurationImportSelector.class) 是将特定路径（META-INF/spring.factories）中所有符合自动配置条件（@ConditionalOnClass）的类加载到Ioc容器，例如mybatis-spring-boot-starter。`AutoConfigurationImportSelector.java` 中可以看到所有自动配置类的名称。[自动配置类原理](https://juejin.cn/post/7101477895331135495)
   3. @ComponentScan，自动扫描并加载被@Component或@Repository修饰的组件，最终将这些组件加载到容器中，默认路径是该注解所在类的package。
 
 
