@@ -110,7 +110,7 @@ Prototype（原型）对象和单例对象的区别：
 - @SpringBootApplication 包含三个注解：
   1. @SpringBootConfiguration, 继承@Configuration，标注当前类是配置类，并会将当前类内声明的一个或多个以@Bean注解标记的方法的实例注册到spring容器中，并且实例名就是方法名。
   2. [@EnableAutoConfiguration](https://www.cnblogs.com/kevin-yuan/p/13583269.html)，主要由 @AutoConfigurationPackage，@Import(EnableAutoConfigurationImportSelector.class)这两个注解组成的。
-    - @AutoConfigurationPackage 内部是 @({Registrar.class})，用于将启动类所在的包里面的所有组件注册到spring容器。
+    - @AutoConfigurationPackage 内部是 @({Registrar.class})，用于将启动类所在的包里面的所有组件注册到spring容器。扫描 @Entity, @Mapper 等第三方依赖注解。
     - @Import(EnableAutoConfigurationImportSelector.class) 是将特定路径（META-INF/spring.factories）中所有符合自动配置条件（@ConditionalOnClass）的类加载到Ioc容器，例如mybatis-spring-boot-starter。`AutoConfigurationImportSelector.java` 中可以看到所有自动配置类的名称。[自动配置类原理](https://juejin.cn/post/7101477895331135495)
   3. @ComponentScan，自动扫描并加载被@Component或@Repository修饰的组件，最终将这些组件加载到容器中，默认路径是该注解所在类的package。
 
