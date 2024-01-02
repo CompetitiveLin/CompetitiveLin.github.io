@@ -7,10 +7,32 @@ last_modified_at:
 pin: false
 ---
 
-# 消息队列的三大作用
+# 基本概念
+
+1. RocketMQ 由 Producer, Brocker, Consumer 组成
+- Producer 负责生产消息
+- Consumer 负责消费消息
+- Broker 负责存储消息，每一个 Broker 对应一台服务器但可以存储多个 Topic 的消息，每个 Topic 的消息也分片存储在不同的 Broker 里。
+
+2. Topic 是逻辑概念，队列（Kafka 中叫分区）是物理概念。每个主题包含多个消息，每条消息只属于一个主题。一个 Producer 可以同时发送多种 Topic 的消息，而一个 Consumer 只能订阅一个 Topic 的消息。Tag 类似于子主题。
+
+3. MessageQueue用于存储消息的物理地址，每个Topic中的消息地址存储于多个MessageQueue
+
+4. 消费方式，Pull Consumer，拉取式消费，Consumer 需要主动拉取 Broker 中的消息；Push Consumer，推动式消费，Broker 一接收到消息马上发送给 Consumer，具有实时性。
+
+5. RocketMQ 提供多种发送方式：同步发送、异步发送、单向发送。其中同步发送和异步发送需要 Broker 返回确认消息，而单向发送不需要。
+
+6. 消费者群组：一个消费者组可以消费多个 Topic 的消息，组内的消费者只能订阅相同的 Topic 和相同的 tag且 Tag 顺序相同。详见[订阅关系一致](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-4-x-series/use-cases/subscription-consistency)。支持[两种消费方式](https://juejin.cn/post/7089788861915594766)：集群消费（默认）和广播消费。集群消费，相同消费者群组的消费者平摊消息，便于负载均衡；广播消费，相同消费者群组的每个消费者接收全量的消息，适合并行处理的场景。
+
+## 消息队列的三大作用
 - 解耦
 - 异步
 - 削峰
+
+## 模式
+- 点对点模式：基于队列，每条消息只能被一个消费者消费，RabbitMQ。
+- 发布/订阅模式：一条消息能被多个消费者消费，RocketMQ 和 Kafka。
+
 
 # [区别](https://blog.csdn.net/shijinghan1126/article/details/104724407)
 
