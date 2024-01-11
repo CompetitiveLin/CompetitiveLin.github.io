@@ -26,7 +26,6 @@ pin: false
 
 6. 消费者群组：一个消费者组可以消费多个 Topic 的消息，组内的消费者只能订阅相同的 Topic 和相同的 tag且 Tag 顺序相同。详见[订阅关系一致](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-4-x-series/use-cases/subscription-consistency)。支持[两种消费方式](https://juejin.cn/post/7089788861915594766)：集群消费（默认）和广播消费。集群消费，相同消费者群组的消费者平摊消息，便于负载均衡；广播消费，相同消费者群组的每个消费者接收全量的消息，适合并行处理的场景。
 
-7. 
 
 ## 消息队列的三大作用
 - 解耦
@@ -103,6 +102,16 @@ pin: false
 
 如果事务正常执行，则 commit 该消息，如果抛出异常，则 rollback。对于消费消息失败，RocketMQ 会尝试重新消费，直到被加入死信队列中为止。在重试的过程中有可能产生重复的消息，所以对于消费端来说要确保**消费幂等**！
 
+## 消息堆积
+
+原因可能是以下三种：
+1. 生产远超预期
+2. 消息接收和持久化出现故障
+3. 消费能力下降
+4. 程序问题
+
+处理堆积的消息：建立临时的 topic（扩容），转发堆积的消息
+
 
 ## 服务发现
 - Kafka 使用 ZooKeeper，但新版本使用内嵌的KRaft替代了ZooKeeper
@@ -120,3 +129,34 @@ pin: false
 
 解决方法：要满足局部有序，只需要在发消息的时候指定Partition Key，Partition Key相同的消息会放在同一个Partition。
 
+## RocketMQ 如何保证消息的顺序性
+
+全局有序：对于指定的一个 Topic，所有消息按照严格的先入先出（FIFO）的顺序进行发布和消费。
+局部有序：对于指定的一个 Topic，所有消息根据 hashKey 进行区块分区。 同一个分区内的消息按照严格的 FIFO 顺序进行发布和消费。
+
+实现消息有序性从三个方面：
+
+1. 生产者生产顺序消息：生产者将消息路由到特定分区
+2. Broker 保存顺序消息：保证生产者顺序生产即可
+3. 消费者顺序消费消息：设置 consumeMode 为 ORDERLY
+
+## RocketMQ 负载策略
+1. 平均负载策略，MessageQueue 总数量除以消费者数量并求余数，前余数个数个消费者增加一个 MessageQueue 的消费
+
+![](https://s6.51cto.com/oss/202203/14/e9f849a39832efee7e833607029c85de3880c4.png)
+
+2. 循环分配策略：循环顺序遍历消费者
+
+![](https://s4.51cto.com/oss/202203/14/760652913a6c25afb83877fa3352da05c6e9dc.png)
+
+3. 指定机房分配策略
+
+![](https://s6.51cto.com/oss/202203/14/62b8d0b98e057beb80d026b5a578de36fe376c.png)
+
+4. 机房就近分配策略
+
+![](https://s2.51cto.com/oss/202203/14/522866530333cbe9bc6074464633c81b3a1775.png)
+
+5. 一致性哈希算法策略
+
+![](https://s9.51cto.com/oss/202203/14/d6a9910256e2acc868e4012618187f853c8a3c.png)
