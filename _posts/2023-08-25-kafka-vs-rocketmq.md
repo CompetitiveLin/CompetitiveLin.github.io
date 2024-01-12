@@ -47,6 +47,12 @@ pin: false
 
 - RocketMQ 采用CommitLog + ConsumeQueue，物理存储文件是CommitLog，ConsumeQueue是消息的逻辑队列，类似数据库的索引文件，存储的是指向物理存储的地址。每个Topic下的每个MessageQueue都有一个对应的ConsumeQueue文件，单个broker所有topic在CommitLog中**顺序写**。每个CommitLog大小固定为1G。
 
+生产消息：Producer 先向 CommitLog 顺序写，持久化后将数据 Dispatch 到 ConsumeQueue 中。
+消费消息：Consumer 从 ConsumeQueue 中拉取数据，但拉取到数据是指向 CommitLog 的地址，此时是随机读，但又因为 PageCache 的存在，还是整体有序的。
+
+Page Cache（页面缓存）从内存中划出一块区域缓存文件页，如果要访问外部磁盘上的文件页，首先将这些页面拷贝到内存中，再进行读写。
+
+![](https://pic4.zhimg.com/80/v2-21afcaf0496e6498d181522fd1a0154b_1440w.webp)
 
 ## 吞吐量
 
