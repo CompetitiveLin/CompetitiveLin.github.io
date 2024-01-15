@@ -241,3 +241,27 @@ public class Singleton {
 1. 基于 RocketMQ 的消息事务
 2. 二阶段提交
 3. 三阶段提交，CanCommit、PreCommit、DoCommit三阶段
+
+## ZooKeeper（CP）
+
+主要服务于分布式系统，可以用ZooKeeper来做：统一配置管理、统一命名服务、[分布式锁](https://blog.csdn.net/weixin_40149557/article/details/117268491)、集群管理，用来解决分布式集群中应用系统的一致性问题，构建 ZooKeeper 集群时使用的服务器最好是奇数台。其设计目标是将那些复杂且容易出错的分布式一致性服务封装起来，构成一个高效可靠的原语集，并以一系列简单易用的接口提供给用户使用。
+
+数据结构：Znode节点，与Unix文件系统类似，通过路径来标识，例如 `/home/app`，Znode节点又分为两种类型：临时节点、持久节点、临时顺序节点、持久顺序节点。客户端和服务端断开连接后，临时节点会自动删除但持久节点不会。[分布式锁使用的是临时节点](https://www.51cto.com/article/687086.html)。
+
+Watcher 监听器：节点的数据发生变化后会通知到节点的监听器。
+
+基本命令：
+- create : 在树中的某个位置创建一个节点
+- delete : 删除一个节点存在：测试节点是否存在于某个位置
+- get data : 从节点读取数据
+- set data： 将数据写入节点
+- get children : 检索节点的子节点列表
+- sync : 等待数据被传播
+
+实现分布式锁原理：判断能否创建临时节点，如果不能则监听父节点（非公平锁）或上一个节点（公平锁），任务执行完成后释放该节点并通知所有监听的节点。
+
+实现注册中心原理：初始化时 Provider 先向目录写入 URL 地址，Consumer 订阅相同目录的 URL 地址和自己的 URL 地址，监控中心订阅 Provider 和 Consumer 的 URL 地址；Consumer 在第一次调用服务时，会通过注册中心找到相应的服务的IP地址列表，并缓存到本地，以供后续使用；当 Provider 下线时，会在列表中移除 URL 并将新的 URL 地址发送给 Consumer 并缓存至本地，服务上线也是一样的。
+
+
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/76e2b26a0fdd40ff9bc96837b4865dba~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
