@@ -244,6 +244,11 @@ public class Singleton {
 
 ## ZooKeeper（CP）
 
+使用 ZAB 协议，包括两种运行模式：
+1. 消息广播（Leader 正常运行），所有事务请求由单一主进程处理，Leader 转换为事务 Proposal 并广播分发给 Follower，Leader 等待 Follower 的反馈，超过半数的 Follower 反馈消息后，Leader 再发送 Commit 消息提交事务 Proposal。
+
+2. 崩溃恢复（Leader 不可用时），新选举产生的 Leader 与过半的 Follower 进行同步，使数据一致，同步后进入消息广播模式。
+
 主要服务于分布式系统，可以用ZooKeeper来做：统一配置管理、统一命名服务、[分布式锁](https://blog.csdn.net/weixin_40149557/article/details/117268491)、集群管理，用来解决分布式集群中应用系统的一致性问题，构建 ZooKeeper 集群时使用的服务器最好是奇数台。其设计目标是将那些复杂且容易出错的分布式一致性服务封装起来，构成一个高效可靠的原语集，并以一系列简单易用的接口提供给用户使用。
 
 数据结构：Znode节点，与Unix文件系统类似，通过路径来标识，例如 `/home/app`，Znode节点又分为两种类型：临时节点、持久节点、临时顺序节点、持久顺序节点。客户端和服务端断开连接后，临时节点会自动删除但持久节点不会。[分布式锁使用的是临时节点](https://www.51cto.com/article/687086.html)。
@@ -262,6 +267,22 @@ Watcher 监听器：节点的数据发生变化后会通知到节点的监听器
 
 实现注册中心原理：初始化时 Provider 先向目录写入 URL 地址，Consumer 订阅相同目录的 URL 地址和自己的 URL 地址，监控中心订阅 Provider 和 Consumer 的 URL 地址；Consumer 在第一次调用服务时，会通过注册中心找到相应的服务的IP地址列表，并缓存到本地，以供后续使用；当 Provider 下线时，会在列表中移除 URL 并将新的 URL 地址发送给 Consumer 并缓存至本地，服务上线也是一样的。
 
-
-
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/76e2b26a0fdd40ff9bc96837b4865dba~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+与 Nacos 的区别：
+
+Nacos 是 AP 的，保证可用性，每个节点都是平等的，若干个节点 crash 后不会影响正常节点，但查到的信息不一定是最新的。ZK 在 crash 后进行 leader 选举，期间是不可用的。
+
+
+## 微服务框架：Dubbo
+
+底层基于 Netty 的 NIO 框架，基于 TCP 协议传输
+
+### 四种负载均衡策略
+
+支持服务端服务级别、服务端方法级别、客户端服务级别、客户端方法级别的负载均衡配置。还可以拓展负载均衡算法。
+
+1. 随机负载均衡，**默认**策略
+2. 轮询负载均衡
+3. 最少活跃调用数，每个 Provider 都有一个计数器，开始调用则计数器加一，结束调用计数器减一。原则是将请求分配给处理速度快的 Provider。
+4. 一致性哈希负载均衡
