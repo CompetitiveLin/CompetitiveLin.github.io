@@ -176,6 +176,10 @@ public class Singleton {
 
 - 创建型
     1. 单例模式（Singleton）
+        - 饿汉模式：类加载的时候就创建实例，整个程序周期都存在
+        - 懒汉模式：只有当第一次使用的时候才创建实例，线程不安全
+        - 双重校验锁：
+        - 静态内部类：
     2. 原型模式（Prototype），能够复制已有对象，而又无需使代码依赖它们所属的类。例如 `Cloneable` 接口是立即可用的原型模式。 
     3. [工厂方法模式（Factory Method）](https://refactoringguru.cn/design-patterns/factory-method/java/example)，在父类中提供一个创建对象的方法， 允许子类决定实例化对象
     4. [抽象工厂模式（Abstract Factory）](https://refactoringguru.cn/design-patterns/abstract-factory/java/example)，定义了用于创建不同产品的**接口**， 但将实际的创建工作留给了具体工厂类。 每个工厂类型都对应一个特定的产品变体。
@@ -286,3 +290,10 @@ Nacos 是 AP 的，保证可用性，每个节点都是平等的，若干个节�
 2. 轮询负载均衡
 3. 最少活跃调用数，每个 Provider 都有一个计数器，开始调用则计数器加一，结束调用计数器减一。原则是将请求分配给处理速度快的 Provider。
 4. 一致性哈希负载均衡
+
+### HTTPS 如何保证可靠传输
+
+TLS 协议：
+1. 对称加密/非对称加密
+2. 数字证书
+3. 三次握手/四次挥手
