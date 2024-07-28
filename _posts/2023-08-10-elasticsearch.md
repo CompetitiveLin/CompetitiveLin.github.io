@@ -11,7 +11,32 @@ Elasticsearch是基于 Lucene 架构实现的分布式、海量数据的存储�
 
 倒排索引：被用来存储在全文搜索下某个单词在一个文档或者一组文档中的存储位置的映射。
 
-### ES 为什么这么快
+## 为什么近实时
+
+### 数据写入原理
+
+大概分为三个步骤：write -> refresh -> flush
+
+1、write：文档数据到内存缓存，并存到 translog
+
+2、refresh：内存缓存中的文档数据，到文件缓存中的 segment 。此时可以被搜到。
+
+3、flush： 缓存中的 segment 文档数据写入到磁盘
+
+当数据添加到索引后并不能马上被查询到，等到索引刷新后才会被查询到。refresh_interval 参数设置为正数之后，需要等相应时间后才可以在es索引中搜索到，因为已经从内存缓存刷新到文件缓存中了。详见[数据写入与查询存在时间差问题](https://www.cnblogs.com/eternityz/p/17051673.html)
+
+![](https://i-blog.csdnimg.cn/blog_migrate/f7d4c9850eeac65f9979a5463f346b4a.png)
+1. indexing Buffer 属于 ES 内存的一部分，OS 系统文件缓存属于操作系统的，不属于 ES 内存
+2. refresh 操作：定时将 ES 缓冲区转换成 segment 并写入系统文件的过程。（近实时搜索的根本原因）
+3. translog 日志文件，不管是 ES 缓冲区还是系统缓冲区的内容，只要没写入到磁盘，就会在日志文件里记录，当 flush 到磁盘后，就会清空。
+4. flush 操作：将 segment 持久化到磁盘，同时清理 translog。主要分为以下几步：
+    1. 内存中的数据写入新的segment并放入缓存（清空内存区）
+    2. 将commit point 写入磁盘，表示哪些 segment 已经写入磁盘
+    3. 将 segment 写入磁盘，使用 fsync 命令
+    4. 清空 translog 日志内容
+
+
+### 为什么这么快
 1. 分布式储存：采用分布式储存技术，将数据存储于多节点，分散负载，优化整体执行效能。
 2. 索引分片：将每索引分裂为多片段，实现并行查询，提升搜索速度。
 3. 全文索引：运用高效全文索引技术，将文档转化为可搜索的结构化数据，快速高效地完成搜索操作。
@@ -54,18 +79,6 @@ Elasticsearch 针对 Filter 查询只需要回答「是」或者「否」，不�
 Scroll Query + Bulk
 
 Ingest pipeline 可以在数据存入ES之前对数据进行转换，例如转小写，增加字段等。
-
-### 数据写入原理
-
-大概分为三个步骤：write -> refresh -> flush
-
-1、write：文档数据到内存缓存，并存到 translog
-
-2、refresh：内存缓存中的文档数据，到文件缓存中的 segment 。此时可以被搜到。
-
-3、flush： 缓存中的 segment 文档数据写入到磁盘
-
-当数据添加到索引后并不能马上被查询到，等到索引刷新后才会被查询到。refresh_interval 参数设置为正数之后，需要等相应时间后才可以在es索引中搜索到，因为已经从内存缓存刷新到文件缓存中了。详见[数据写入与查询存在时间差问题](https://www.cnblogs.com/eternityz/p/17051673.html)
 
 性能优化：
 
