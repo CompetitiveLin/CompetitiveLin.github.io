@@ -11,6 +11,29 @@ Elasticsearch是基于 Lucene 架构实现的分布式、海量数据的存储�
 
 倒排索引：被用来存储在全文搜索下某个单词在一个文档或者一组文档中的存储位置的映射。
 
+## 写数据的过程
+
+1. 客户端选择一个 node 发送请求，这个 node 就成为了 coordinate node （协调节点）
+2. 该协调节点将输入的 document 做哈希路由，将请求转发给相应的 node
+3. 该 node 在 primary shard 上处理请求，并将数据同步到 replica 上
+4. 协调节点在写入完成后返回响应结果
+
+## 读数据的过程
+
+1. 客户端选择一个 node 发送请求，这个 node 就成为了 coordinate node （协调节点）
+2. 该协调节点对输入的 document id 做哈希，将请求转发给相应的 node
+3. 该 node 使用 round-robin 轮询算法在 primary 和所有 replica 中选择一个，让读请求负载均衡
+4. 协调节点返回查询结果
+
+## 更新、删除数据的过程
+
+本质上都是写操作！磁盘上的每个段都有一个相应的 `.del` 文件。
+
+- 删除操作（不是删除索引）是逻辑删除，document 被标记为 deleted 状态。当段合并时，在 `.del` 文件中被标记为删除的文档将不会被写入新段。
+- 更新操作是把原 document 标记为删除，再写入新的 document 数据
+
+
+
 ## 为什么近实时
 
 ### 数据写入原理
@@ -28,7 +51,7 @@ Elasticsearch是基于 Lucene 架构实现的分布式、海量数据的存储�
 ![](https://i-blog.csdnimg.cn/blog_migrate/f7d4c9850eeac65f9979a5463f346b4a.png)
 1. indexing Buffer 属于 ES 内存的一部分，OS 系统文件缓存属于操作系统的，不属于 ES 内存
 2. refresh 操作：定时将 ES 缓冲区转换成 segment 并写入系统文件的过程。（近实时搜索的根本原因）
-3. translog 日志文件，不管是 ES 缓冲区还是系统缓冲区的内容，只要没写入到磁盘，就会在日志文件里记录，当 flush 到磁盘后，就会清空。
+3. translog 日志文件，不管是 ES 缓冲区还是系统缓冲区的内容，只要没写入到磁盘，就会在日志文件里记录，当 flush 到磁盘后，内存和磁盘中的文件就会清空。日志文件也是先写入 os cache，默认每隔 5 秒刷一次到磁盘，所以可能存在5秒的数据丢失
 4. flush 操作：将 segment 持久化到磁盘，同时清理 translog。主要分为以下几步：
     1. 内存中的数据写入新的segment并放入缓存（清空内存区）
     2. 将commit point 写入磁盘，表示哪些 segment 已经写入磁盘
@@ -116,3 +139,4 @@ ElasticSearch 默认为text类型，但是text类型总会有keyword的类型的
 
 ## 集群架构设计
 1. 设置分片数量，但不宜过大。
+
