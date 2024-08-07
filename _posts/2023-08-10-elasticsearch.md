@@ -75,7 +75,7 @@ Term Index: 倒排的树状结构，存在内存里，是Term dictionary的索�
 
 1. Cluster，集群。一个集群包含多个节点，对外提供服务。
 2. Node，节点。一个节点运行在一个独立的环境或虚拟机上，一个节点可以包含多个分片，一个索引由多个分片组成
-3. Shard，分片。（Primary Shard 和 Replica Shard）
+3. Shard，分片。（Primary Shard 和 Replica Shard），主分片数量在创建索引的时候就需要固定，并且无法做修改。
 4. Index，索引，相当于mysql中的库。
 5. Type，类型，一个索引可以对应一个或者多个类型。（ES6.0后被废弃，ES7完全删除）
 6. Mapping，映射，相当于表结构。
@@ -139,4 +139,11 @@ ElasticSearch 默认为text类型，但是text类型总会有keyword的类型的
 
 ## 集群架构设计
 1. 设置分片数量，但不宜过大。
+
+# 扩容
+
+- 垂直扩容：替换旧的设备
+
+- 水平扩容：直接新增设备到集群中
+
 

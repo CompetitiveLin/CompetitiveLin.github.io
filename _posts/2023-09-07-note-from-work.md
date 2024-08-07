@@ -180,14 +180,14 @@ public class Singleton {
     5. [建造者模式（Builder）](https://refactoringguru.cn/design-patterns/builder/java/example)，分步骤创建复杂对象。
 - 行为型
     1. 模板方法模式（Template Method），它在基类中定义了一个算法的框架，允许子类在不修改结构的情况下重写算法的特定步骤。
-    2. 责任链模式（Chain of Responsibility）
+    2. 责任链模式（Chain of Responsibility），它让多个处理器（对象节点）按顺序处理该请求，直到其中某个处理成功为止，例如检查商品模块，需要先检查商品合法性，再检查商品可见性等等。
     3. 命令模式（Command）
     4. 迭代器模式（Iterator）
     5. 中介者模式（Mediator）
     6. 备忘录模式（Memeoto）
     7. 观察者模式（Observer）
     8. 状态模式（State）
-    9. 策略模式（Strategy）
+    9. 策略模式（Strategy），规定每个策略的不同方法，只需选择不同的策略即可执行不同的方法，例如数字人项目中 Provider 的选择（1：AiLab，2：Creatify，3：IC，4：IC-NEW）
     10. 访问者模式（Visitor）
     11. 解释器模式（Interpreter）
 - 结构型
