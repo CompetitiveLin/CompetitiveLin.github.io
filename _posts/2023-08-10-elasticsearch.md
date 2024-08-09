@@ -46,7 +46,7 @@ Elasticsearch是基于 Lucene 架构实现的分布式、海量数据的存储�
 
 3、flush： 缓存中的 segment 文档数据写入到磁盘
 
-当数据添加到索引后并不能马上被查询到，等到索引刷新后才会被查询到。refresh_interval 参数设置为正数之后，需要等相应时间后才可以在es索引中搜索到，因为已经从内存缓存刷新到文件缓存中了。详见[数据写入与查询存在时间差问题](https://www.cnblogs.com/eternityz/p/17051673.html)
+当数据添加到索引后并不能马上被查询到，等到索引刷新后才会被查询到。refresh_interval 参数设置为正数之后，需要等一段时间后才可以在es索引中搜索到，因为已经从内存缓存刷新到文件缓存中了。详见[数据写入与查询存在时间差问题](https://www.cnblogs.com/eternityz/p/17051673.html)
 
 ![](https://i-blog.csdnimg.cn/blog_migrate/f7d4c9850eeac65f9979a5463f346b4a.png)
 1. indexing Buffer 属于 ES 内存的一部分，OS 系统文件缓存属于操作系统的，不属于 ES 内存
