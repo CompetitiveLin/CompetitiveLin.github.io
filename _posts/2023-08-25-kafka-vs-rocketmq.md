@@ -84,9 +84,14 @@ Page Cache（页面缓存）从内存中划出一块区域缓存文件页，如�
 
 
 ## 零拷贝
+
+传统的数据传输过程通常需要经历多次内存拷贝。
+
+首先，从磁盘读取数据，然后将数据从内核空间拷贝到用户空间，再从用户空间拷贝到应用程序的内存中。这些额外的拷贝会消耗大量的CPU资源和内存带宽，降低数据传输的效率。零拷贝就是为了避免这些不必要的数据拷贝，能够将数据直接传输到目标内存区域，以提高数据传输的效率。
+
 实现方式
 1. mmap(Memory Mapped Files) + write，作用：将磁盘文件映射到内存, 用户通过修改内存就能修改磁盘文件。Java NIO里对应的是MappedByteBuffer类，可以用来实现内存映射。它的底层是调用了Linux内核的mmap的API。
-2. sendfile，实现：将读到内核空间的数据，转到socket buffer，进行网络发送。FileChannel的transferTo()/transferFrom()，底层就是sendfile() 系统调用函数。
+2. sendfile，实现：将读到内核空间的数据，拷贝到socket buffer，进行网络发送。避免了数据在内核和用户空间之间的额外拷贝。FileChannel的transferTo()/transferFrom()，底层就是sendfile() 系统调用函数。
 
 零拷贝技术减少了用户进程地址空间和内核地址空间之间由于上下文切换而带来的开销。DMA (Direct Memory Access) 是零拷贝技术的基石。并不是不需要拷贝，而是减少冗余不必要的拷贝。
 - Kafka： Producer生产的数据持久化到 broker 采用 mmap 文件映射，实现顺序的快速写入；而 Customer 从 broker 读取数据采用 sendfile 进行网络发送。
