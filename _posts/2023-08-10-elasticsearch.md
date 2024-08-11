@@ -14,14 +14,14 @@ Elasticsearch是基于 Lucene 架构实现的分布式、海量数据的存储�
 ## 写数据的过程
 
 1. 客户端选择一个 node 发送请求，这个 node 就成为了 coordinate node （协调节点）
-2. 该协调节点将输入的 document 做哈希路由，将请求转发给相应的 node
+2. 该协调节点将输入的 document 做哈希路由得到 shard id，将请求转发给 shard id 对应的 node
 3. 该 node 在 primary shard 上处理请求，并将数据同步到 replica 上
 4. 协调节点在写入完成后返回响应结果
 
 ## 读数据的过程
 
 1. 客户端选择一个 node 发送请求，这个 node 就成为了 coordinate node （协调节点）
-2. 该协调节点对输入的 document id 做哈希，将请求转发给相应的 node
+2. 该协调节点对输入的 document id 做哈希得到 shard id，将请求转发给 shard id 对应的 node
 3. 该 node 使用 round-robin 轮询算法在 primary 和所有 replica 中选择一个，让读请求负载均衡
 4. 协调节点返回查询结果
 
