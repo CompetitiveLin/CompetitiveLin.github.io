@@ -180,18 +180,25 @@ Kafka：topic 从几十到几百个时候，吞吐量会大幅度下降，在同
 
 ### RocketMQ 如何保证消息的顺序性
 
-全局有序：对于指定的一个 Topic，所有消息按照严格的先入先出（FIFO）的顺序进行发布和消费。
+全局有序：对于指定的一个 Topic，设置读写队列的数量为一。（与Kafka设置一个partition类似）
 局部有序：对于指定的一个 Topic，生产者根据 hashKey 将消息发送到同一个MessageQueue。 同一个分区内的消息按照严格的 FIFO 顺序进行发布和消费。
 
 实现消息有序性从三个方面：
 
-1. 生产者生产顺序消息：生产者将消息路由到特定分区
-2. Broker 保存顺序消息：保证生产者顺序生产即可
-3. 消费者顺序消费消息：设置 consumeMode 为 ORDERLY
+1. 生产者生产顺序消息：生产者将消息路由到特定分区，单线程发送消息
+2. Broker 保存顺序消息：保证生产者顺序生产即可，保存到指定的Partition或MessageQueue中
+3. 消费者顺序消费消息：设置 consumeMode 为 ORDERLY，单线程消费消息
 
 
 
 ## RocketMQ 负载策略
+
+### Producer 负载均衡
+
+Producer 默认采用轮询的方法，按顺序将消息发送到 MessageQueue 里。
+
+### Consumer 负载均衡
+
 1. 平均负载策略，MessageQueue 总数量除以消费者数量并求余数，前余数个数个消费者增加一个 MessageQueue 的消费
 
 ![](https://s6.51cto.com/oss/202203/14/e9f849a39832efee7e833607029c85de3880c4.png)
