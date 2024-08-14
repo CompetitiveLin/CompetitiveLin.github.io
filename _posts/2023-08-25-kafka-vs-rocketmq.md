@@ -18,13 +18,11 @@ pin: false
 
 3. MessageQueue用于存储消息的物理地址，每个Topic中的消息地址存储于多个MessageQueue，是消息的最小存储单元。
 
-4. 消费方式，Pull 拉取式消费，Consumer 需要主动拉取 Broker 中的消息；Push 推送式消费，Broker 一接收到消息马上发送给 Consumer，具有实时性。RocketMQ是基于 Pull 模式的**长轮询**策略实现消息消费的。即 Consumer 发送拉取请求到 Broker 端，如果 Broker 有数据则返回并继续发起长轮询，如果没有则 hold 请求，不立即返回，直到超时（默认5s）并继续发起长轮询。为什么需要设置超时？1. 无法避免服务器假死等情况以确保可用性；2. 可能修改监听的配置
+4. 消费方式，Pull 拉取式消费，Consumer 需要主动拉取 Broker 中的消息；Push 推送式消费，Broker 一接收到消息马上发送给 Consumer，具有实时性。RocketMQ是基于 Pull 模式的**长轮询**策略实现消息消费的。即 Consumer 发送拉取请求到 Broker 端，如果 Broker 有数据则返回并继续发起长轮询，如果没有则 hold 请求（指的服务端暂时不回复结果，保存相关请求，不关闭请求连接），不立即返回，直到超时（默认5s）并继续发起长轮询。为什么需要设置超时？1. 无法避免服务器假死等情况以确保可用性；2. 可能修改监听的配置
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/69eb913379e6407da05a7b13d9035976~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
 
 5. RocketMQ 提供多种发送方式：同步发送、异步发送、单向发送。其中同步发送和异步发送需要 Broker 返回确认消息，而单向发送不需要。
-
-6. 消费者群组：一个消费者组可以消费多个 Topic 的消息，组内的消费者只能订阅相同的 Topic 和相同的 tag且 Tag 顺序相同。详见[订阅关系一致](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-4-x-series/use-cases/subscription-consistency)。支持[两种消费方式](https://juejin.cn/post/7089788861915594766)：集群消费（默认）和广播消费。集群消费，相同消费者群组的消费者平摊消息，便于负载均衡；广播消费，相同消费者群组的每个消费者接收全量的消息，适合并行处理的场景。
 
 
 ## 消息队列的三大作用
@@ -225,3 +223,21 @@ Kafka：适用于日志收集与分析、实时流处理、大数据集成（例
 RocketMQ：更适合金融交易、订单处理、秒杀活动、库存同步、跨系统间的服务解耦和异步调用等场景，尤其是那些对消息顺序、事务完整性和实时性要求极高的业务。
 
 
+# 消费者
+
+## 消费者群组（Consumer Group）
+
+消费者组是一组共享 `group.id` 的消费者实例，一个消费者组可以消费多个 Topic 的消息，组内的消费者只能订阅相同的 Topic 和相同的 Tag 且 Tag 顺序相同。详见[订阅关系一致](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-4-x-series/use-cases/subscription-consistency)。
+
+## 消费方式
+1. 集群模式（默认）：相同消费者群组的消费者平摊消息，便于负载均衡
+![](https://img2023.cnblogs.com/blog/80824/202302/80824-20230222093917462-1788706428.png)
+
+2. 广播模式：相同消费者群组的每个消费者接收全量的消息，适合并行处理的场景。
+![](https://img2023.cnblogs.com/blog/80824/202302/80824-20230222094424631-1247508728.png)
+
+RocketMQ/Kafka 使用 Consumer Group 机制，实现了传统两大消息引擎。如果所有实例属于同一个Group，那么它实现的就是消息队列模型；如果所有实例分别属于不同的Group，且订阅了相同的主题，那么它就实现了发布/订阅模型；
+
+## 消费者和消费者组的关系
+1. 同一个消费者组内部的消费者均匀消费订阅的 Topic 的消息，负载均衡
+2. 不同消费者组全量消费订阅的 Topic 的消息，类似消费者组层面的广播模式
