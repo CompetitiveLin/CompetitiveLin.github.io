@@ -89,7 +89,8 @@ Page Cache（页面缓存）从内存中划出一块区域缓存文件页，如�
 
 实现方式
 1. mmap(Memory Mapped Files) + write，作用：将磁盘文件映射到内存, 用户通过修改内存就能修改磁盘文件。Java NIO里对应的是MappedByteBuffer类，可以用来实现内存映射。它的底层是调用了Linux内核的mmap的API。
-2. sendfile，实现：将读到内核空间的数据，拷贝到socket buffer，进行网络发送。避免了数据在内核和用户空间之间的额外拷贝。FileChannel的transferTo()/transferFrom()，底层就是sendfile() 系统调用函数。
+2. sendfile，实现：将读到内核空间的数据，直接拷贝到socket buffer，进行网络发送。避免了数据在内核和用户空间之间的额外拷贝。FileChannel的transferTo()/transferFrom()，底层就是sendfile() 系统调用函数。
+![](https://raw.githubusercontent.com/CompetitiveLin/ImageHostingService/picgo/imgs/202408141615739.png)
 
 零拷贝技术减少了用户进程地址空间和内核地址空间之间由于上下文切换而带来的开销。DMA (Direct Memory Access) 是零拷贝技术的基石。并不是不需要拷贝，而是减少冗余不必要的拷贝。
 - Kafka： Producer生产的数据持久化到 broker 采用 mmap 文件映射，实现顺序的快速写入；而 Customer 从 broker 读取数据采用 sendfile 进行网络发送。
@@ -97,7 +98,7 @@ Page Cache（页面缓存）从内存中划出一块区域缓存文件页，如�
 
 为什么 Kafka 这么快？
 
-答：四个要点，顺序读写、零拷贝、消息压缩、[分批发送](https://xie.infoq.cn/article/60f221598d38442575d6fa5e0)。
+答：六个要点，顺序读写、零拷贝、消息压缩、[分批读写/发送](https://xie.infoq.cn/article/60f221598d38442575d6fa5e0)、基于操作系统内存PageCache的读写、基于Partition的分区分段。
 
 为什么 RocketMQ 这么快？
 
@@ -157,7 +158,7 @@ RocketMQ 的消费重试是基于**延迟消息**实现的，在消息消费失�
 
 RocketMQ：topic 可以达到几百/几千的级别，吞吐量会有较小幅度的下降，这是 RocketMQ 的一大优势，在同等机器下，可以支撑大量的 topic
 
-Kafka：topic 从几十到几百个时候，吞吐量会大幅度下降，在同等机器下，Kafka 尽量保证 topic 数量不要过多，如果要支撑大规模的 topic，需要增加更多的机器资源
+Kafka：topic 从几十到几百个时候，吞吐量会大幅度下降。原理：Kafka 利用操作系统的 PageCache 先将消息持久化到内存中，并不是直接写入磁盘。Topic 增加，也就是 Partition 数量会增加，使用的 PageCache 也会大量增加，大量增加后需要使用 LRU 淘汰算法对 Page 内容刷新到磁盘中，导致性能会下降。
 
 
 
