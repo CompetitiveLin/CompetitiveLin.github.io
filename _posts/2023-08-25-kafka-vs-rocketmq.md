@@ -22,9 +22,6 @@ pin: false
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/69eb913379e6407da05a7b13d9035976~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
 
-5. RocketMQ 提供多种发送方式：同步发送、异步发送、单向发送。其中同步发送和异步发送需要 Broker 返回确认消息，而单向发送不需要。
-
-
 ## 消息队列的三大作用
 - 解耦
 - 异步
@@ -34,6 +31,27 @@ pin: false
 - 点对点模式：基于队列，每条消息只能被一个消费者消费，RabbitMQ。
 - 发布/订阅模式：一条消息能被多个消费者消费，RocketMQ 和 Kafka。
 
+
+## 消息发送方式
+
+- RocketMQ
+    1. 同步发送(Sync)
+    2. 异步发送(Async)
+    3. 单向发送(One-way)
+其中同步发送和异步发送需要 Broker 返回确认消息，而单向发送不需要。
+
+- Kafka
+    1. 发后即忘(fire-and-forget)
+    2. 同步(sync)
+    3. 异步(async)
+
+## 消息消费方式
+
+- Kafka：从用户角度分为手动提交和自动提交；从 Consumer 的角度分为同步提交和异步提交
+    1. 自动提交偏移量
+    2. 手动同步提交偏移量
+    3. 手动异步提交偏移量
+    4. 同步异步结合提交偏移量
 
 # [区别](https://blog.csdn.net/shijinghan1126/article/details/104724407)
 
@@ -74,11 +92,11 @@ Page Cache（页面缓存）从内存中划出一块区域缓存文件页，如�
 
 两者类似，都是从 Producer -> Broker -> Consumer 三个阶段逐一判断，只不过设置的参数不同。
 
-- Producer: 同步发送消息；超时重试发送；消息补偿机制（Kafka，超时仍失败的情况下，会继续投递到本地消息表，定时轮询并推送到Kafka）
+- Producer: 同步发送消息；超时重试发送；消息补偿机制（Kafka，超时仍失败的情况下，会继续投递到本地消息表，定时轮询并推送到Kafka）；ACKs（Kafka中，该参数表示多少个副本收到消息，认为消息写入成功）
 
 - Broker: 同步刷盘；设置主从模式，配置副本
 
-- Consumer: At least Once 的消费机制；消费重试；手动确认消息（Kafka）
+- Consumer: At least Once 的消费机制；消费重试；ACK机制；手动提交位移（Kafka）
 
 
 ## 零拷贝
@@ -98,7 +116,7 @@ Page Cache（页面缓存）从内存中划出一块区域缓存文件页，如�
 
 为什么 Kafka 这么快？
 
-答：六个要点，顺序读写、零拷贝、消息压缩、[分批读写/发送](https://xie.infoq.cn/article/60f221598d38442575d6fa5e0)、基于操作系统内存PageCache的读写、基于Partition的分区分段。
+答：六个要点，顺序读写、零拷贝、消息压缩、[分批读写/发送](https://xie.infoq.cn/article/60f221598d38442575d6fa5e0)、基于操作系统内存PageCache的读写、分区分段 + 索引。
 
 为什么 RocketMQ 这么快？
 
@@ -188,6 +206,9 @@ Kafka：topic 从几十到几百个时候，吞吐量会大幅度下降。原理
 2. Broker 保存顺序消息：保证生产者顺序生产即可，保存到指定的Partition或MessageQueue中
 3. 消费者顺序消费消息：设置 consumeMode 为 ORDERLY，单线程消费消息
 
+## Kafka 负载策略
+
+主写主读，不支持读写分离
 
 
 ## RocketMQ 负载策略
@@ -198,25 +219,27 @@ Producer 默认采用轮询的方法，按顺序将消息发送到 MessageQueue 
 
 ### Consumer 负载均衡
 
-1. 平均负载策略，MessageQueue 总数量除以消费者数量并求余数，前余数个数个消费者增加一个 MessageQueue 的消费
+1. 平均负载策略（默认）：AllocateMessageQueueAveragely 
 
 ![](https://s6.51cto.com/oss/202203/14/e9f849a39832efee7e833607029c85de3880c4.png)
 
-2. 循环分配策略：循环顺序遍历消费者
+2. 循环分配策略：循环顺序遍历消费者：AllocateMessageQueueAveragelyByCircle
 
 ![](https://s4.51cto.com/oss/202203/14/760652913a6c25afb83877fa3352da05c6e9dc.png)
 
-3. 指定机房分配策略
+3. 指定机房分配策略：AllocateMessageQueueByMachineRoom
 
 ![](https://s6.51cto.com/oss/202203/14/62b8d0b98e057beb80d026b5a578de36fe376c.png)
 
-4. 机房就近分配策略
+4. 机房就近分配策略：AllocateMachineRoomNearby
 
 ![](https://s2.51cto.com/oss/202203/14/522866530333cbe9bc6074464633c81b3a1775.png)
 
-5. 一致性哈希算法策略
+5. 一致性哈希算法策略：AllocateMessageQueueConsistentHash
 
 ![](https://s9.51cto.com/oss/202203/14/d6a9910256e2acc868e4012618187f853c8a3c.png)
+
+6. 按照指定配置的策略：AllocateMessageQueueByConfig
 
 ## 适用场景
 
