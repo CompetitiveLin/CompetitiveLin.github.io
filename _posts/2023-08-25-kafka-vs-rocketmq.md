@@ -253,15 +253,15 @@ RocketMQ：更适合金融交易、订单处理、秒杀活动、库存同步、
 
 消费者组是一组共享 `group.id` 的消费者实例，一个消费者组可以消费多个 Topic 的消息，组内的消费者只能订阅相同的 Topic 和相同的 Tag 且 Tag 顺序相同。详见[订阅关系一致](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-4-x-series/use-cases/subscription-consistency)。
 
-## 消费方式
+## 消费方式（RocketMQ）
 1. 集群模式（默认）：相同消费者群组的消费者平摊消息，便于负载均衡
 ![](https://img2023.cnblogs.com/blog/80824/202302/80824-20230222093917462-1788706428.png)
 
-2. 广播模式：相同消费者群组的每个消费者接收全量的消息，适合并行处理的场景。
+2. 广播模式：相同消费者群组的每个消费者接收全量的消息，适合并行处理的场景。在该模式下，消费者组的概念在消息划分方面并没有意义。
 ![](https://img2023.cnblogs.com/blog/80824/202302/80824-20230222094424631-1247508728.png)
 
 RocketMQ/Kafka 使用 Consumer Group 机制，实现了传统两大消息引擎。如果所有实例属于同一个Group，那么它实现的就是消息队列模型；如果所有实例分别属于不同的Group，且订阅了相同的主题，那么它就实现了发布/订阅模型；
 
 ## 消费者和消费者组的关系
 1. 同一个消费者组内部的消费者均匀消费订阅的 Topic 的消息，负载均衡
-2. 不同消费者组全量消费订阅的 Topic 的消息，类似消费者组层面的广播模式
+2. 不同消费者组全量消费订阅的 Topic 的消息，类似消费者组层面的广播模式。但 Kafka 和 RocketMQ 不同的地方在于，Kafka 所有 Partition 会均匀分配给 Consumer 消费（因此 Consumer 只消费 Topic 的部分数据），而不像 RocketMQ 那样，每个 Consumer 全量消费 Topic 里的消息。
