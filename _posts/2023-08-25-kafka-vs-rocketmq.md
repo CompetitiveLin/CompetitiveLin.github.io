@@ -111,7 +111,7 @@ Page Cache（页面缓存）从内存中划出一块区域缓存文件页，如�
 ![](https://raw.githubusercontent.com/CompetitiveLin/ImageHostingService/picgo/imgs/202408141615739.png)
 
 零拷贝技术减少了用户进程地址空间和内核地址空间之间由于上下文切换而带来的开销。DMA (Direct Memory Access) 是零拷贝技术的基石。并不是不需要拷贝，而是减少冗余不必要的拷贝。
-- Kafka： Producer生产的数据持久化到 broker 采用 mmap 文件映射，实现顺序的快速写入；而 Customer 从 broker 读取数据采用 sendfile 进行网络发送。
+- Kafka： Producer生产的数据持久化到 broker 采用 mmap 文件映射（在读写稀疏索引文件用到），实现顺序的快速写入；而 Customer 从 broker 读取数据采用 sendfile 进行网络发送。
 - RocketMQ：采用 mmap 的方法。正因为使用内存映射机制，RocketMQ的文件存储都使用定长结构来存储，方便一次将整个文件映射至内存。
 
 为什么 Kafka 这么快？
@@ -279,6 +279,12 @@ RocketMQ/Kafka 使用 Consumer Group 机制，实现了传统两大消息引擎�
 1. Partition 数量只能增加，不能减少。
 2. 偏移量：指Kafka主题中每个分区中消息的唯一标识符
 3. ISR: In-Sync Replica; OSR: Out-Sync Replica
+
+## 索引机制
+
+![](https://midkuro.github.io/images/amqp-kafka/kafka-03.png)
+
+一个Topic分为多个Partition，一个Partition分为多个Segment。每个Segment对应三个文件：偏移量索引文件、时间戳索引文件、消息存储文件
 
 ## Producer 生产消息的流程
 在消息发送的过程中，涉及到两个线程，main线程和sender线程，其中main线程是消息的生产线程，而sender线程是jvm单例的线程，专门用于消息的发送。在jvm的内存中开辟了一块缓存空间叫RecordAccumulator（消息累加器），用于将多条消息合并成一个批次，然后由sender线程发送给kafka集群。
