@@ -144,8 +144,15 @@ RocketMQ 的消费重试是基于**延迟消息**实现的，在消息消费失�
 基于 **时间轮** 算法
 
 ## 事务
-- Kafka 支持事务（更像是原子性），可以实现对多个 Topic 、多个 Partition 的原子性的写入，即处于同一个事务内的所有消息，最终结果是要么全部写成功，要么全部写失败。实际上是配合其幂等机制来实现 Exactly Once 语义的。
+- Kafka 支持事务（更像是原子性），可以实现对多个 Topic 、多个 Partition 的原子性的写入，即**处于同一个事务内的所有消息，最终结果是要么全部写成功，要么全部写失败**。这种事务机制单独使用的场景不多，更多的是配合其幂等机制来实现 Exactly Once 语义的。通常用于解决从一个 Kafka 数据源消费进行计算等操作，再输入到另一个 Kafka 数据源中的场景。
 - RocketMQ 支持事务，采用二阶段提交+broker定时回查。但也只能保证生产者与broker的一致性，broker与消费者之间只能单向重试。即保证的是最终一致性。
+
+### Kafka 事务
+
+![](https://boilingfrog.github.io/img/mq/kafka-shiwu.png)
+
+
+### RocketMQ 事务
 
 [对于一个大事务来说，可以划分成多个小事务异步执行。](https://dbaplus.cn/news-21-1123-1.html)
 
@@ -247,13 +254,13 @@ Kafka：适用于日志收集与分析、实时流处理、大数据集成（例
 RocketMQ：更适合金融交易、订单处理、秒杀活动、库存同步、跨系统间的服务解耦和异步调用等场景，尤其是那些对消息顺序、事务完整性和实时性要求极高的业务。
 
 
-# 消费者
+## 消费者
 
-## 消费者群组（Consumer Group）
+### 消费者群组（Consumer Group）
 
 消费者组是一组共享 `group.id` 的消费者实例，一个消费者组可以消费多个 Topic 的消息，组内的消费者只能订阅相同的 Topic 和相同的 Tag 且 Tag 顺序相同。详见[订阅关系一致](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-4-x-series/use-cases/subscription-consistency)。
 
-## 消费方式（RocketMQ）
+### 消费方式（RocketMQ）
 1. 集群模式（默认）：相同消费者群组的消费者平摊消息，便于负载均衡
 ![](https://img2023.cnblogs.com/blog/80824/202302/80824-20230222093917462-1788706428.png)
 
@@ -262,6 +269,47 @@ RocketMQ：更适合金融交易、订单处理、秒杀活动、库存同步、
 
 RocketMQ/Kafka 使用 Consumer Group 机制，实现了传统两大消息引擎。如果所有实例属于同一个Group，那么它实现的就是消息队列模型；如果所有实例分别属于不同的Group，且订阅了相同的主题，那么它就实现了发布/订阅模型；
 
-## 消费者和消费者组的关系
+### 消费者和消费者组的关系
 1. 同一个消费者组内部的消费者均匀消费订阅的 Topic 的消息，负载均衡
 2. 不同消费者组全量消费订阅的 Topic 的消息，类似消费者组层面的广播模式。但 Kafka 和 RocketMQ 不同的地方在于，Kafka 所有 Partition 会均匀分配给 Consumer 消费（因此 Consumer 只消费 Topic 的部分数据），而不像 RocketMQ 那样，每个 Consumer 全量消费 Topic 里的消息。
+
+# Kafka 知识点
+
+## 知识点
+1. Partition 数量只能增加，不能减少。
+2. 偏移量：指Kafka主题中每个分区中消息的唯一标识符
+3. ISR: In-Sync Replica; OSR: Out-Sync Replica
+
+## Producer 生产消息的流程
+在消息发送的过程中，涉及到两个线程，main线程和sender线程，其中main线程是消息的生产线程，而sender线程是jvm单例的线程，专门用于消息的发送。在jvm的内存中开辟了一块缓存空间叫RecordAccumulator（消息累加器），用于将多条消息合并成一个批次，然后由sender线程发送给kafka集群。
+
+1. 创建消息以及指定 Topic 调用 Send() 方法
+2. 调用拦截器
+3. 调用序列化器，将消息序列化
+4. 使用分区器（[三种分区策略](https://cloud.tencent.com/developer/article/2111620)）指定 Partition
+    1. DefaultPartitioner 默认分区：指定分区则用该分区，没指定则使用对 key 哈希后值的分区，没有 key 则使用粘性分区策略
+    2. UniformStickyPartitioner  统一粘性分区：直接使用粘性分区策略，即逐个填满 Batch 里的消息
+    3. RoundRobinPartitioner 轮询分区：指定分区则用该分区，否则平均分配
+5. 将消息缓存到消息累加器中
+6. 压缩和批处理消息
+7. 找到相应的 Broker 并发送消息（Sender 线程触发的），可以同步发送也可以异步发送
+8. 确认（ACK）和重试
+9. 更新偏移量
+10. 错误处理，将重试仍失败的消息放入死信队列里
+
+## Consumer 消费过程
+Kafka 采用 Pull 的方式，每个 Consumer 维护一个 HW 水位信息
+
+### 消费者线程模型
+Thread per consumer model：即每个线程都有自己的consumer实例，然后在一个线程里面完成数据的获取（pull）、处理（process）、offset提交。
+
+
+## Leader Replica 选举策略
+1. ISR 选举策略：在 ISR 副本集合中选举
+2. 首选副本选举策略：每个分区都有一个首选副本，通常是副本集合中的第一个副本
+3. 不干净副本选举策略：从所有副本中（包含 OSR 集合）选择一个副本选举
+
+## Zookeeper 在 Kafka 的作用
+1. Broker 注册：每个Broker服务器在启动时，都会到ZooKeeper上进行注册
+2. Topic 注册：同一个 Topic 的消息会被分成多个分区并将其分布在多个 Broker 上，ZK 负责维护这些分区信息及与 Broker 的对应关系
+3. 负载均衡：Consumer 消费消息时，ZK 会根据当前 Partition 数量和 Consumer 数量进行动态负载均衡
