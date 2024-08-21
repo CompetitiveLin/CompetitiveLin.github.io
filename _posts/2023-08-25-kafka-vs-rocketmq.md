@@ -319,3 +319,18 @@ Thread per consumer model：即每个线程都有自己的consumer实例，然�
 1. Broker 注册：每个Broker服务器在启动时，都会到ZooKeeper上进行注册
 2. Topic 注册：同一个 Topic 的消息会被分成多个分区并将其分布在多个 Broker 上，ZK 负责维护这些分区信息及与 Broker 的对应关系
 3. 负载均衡：Consumer 消费消息时，ZK 会根据当前 Partition 数量和 Consumer 数量进行动态负载均衡
+
+## 消息压缩/解压
+
+Producer 发送压缩消息到 Broker 后，Broker 会保存压缩数据，由Consumer 解压数据。
+
+## Controller
+
+Controller 用于在 ZK 的帮助下管理和协调整个 Kafka 集群。集群内任意一台 Broker 都能充当 Controller 的角色，但在运行过程中，只有一个 Controller。
+
+### Controller 职责
+1. 管理 Topic
+2. Preferred Leader 选举
+3. 集群 Broker 管理
+4. 数据服务，保存最完整的元数据信息
+
