@@ -58,7 +58,7 @@ IOC的实现原理是工厂模式加反射机制。
 
 
 [三级缓存解决循环依赖](https://developer.aliyun.com/article/766880)：
-- 前提，出现循环依赖的Bean必须是单例；依赖注入的方式不能全是构造器注入（全是构造器注入则无法解决循环依赖）。
+- 前提，出现循环依赖的Bean必须是单例；依赖注入的方式不能全是构造器注入（通过setter方法进行依赖注入，全是构造器注入则无法解决循环依赖）。
 - getSingleton(beanName)方法三级缓存
   1. singletonObjects，一级缓存，存储的是所有创建好了的**单例Bean对象**
   2. earlySingletonObjects，二级缓存，完成实例化，但是还未进行属性注入及初始化的**提前暴露的对象**
@@ -146,3 +146,10 @@ PROPAGATION_REQUIRES_NEW 和 PROPAGATION_NESTED 的区别：
 结论：
 1. transactional注解修饰的方法会创建一个代理增强类，其他方法调用该注解修饰的方法也只是调用原类中的方法。
 2. transactional修饰的方法内报错就一定会回滚。
+
+# Spring 用到了哪些设计模式
+1. 普通工厂模式：通过 BeanFactory 和 ApplicationContext 容器创建 Bean 对象
+2. 代理模式：AOP 的实现
+3. 单例模式：Bean 默认是单例
+4. 模板方法：jdbcTemplate 等用到了模板方法
+5. 观察者模式：Springboot 事件驱动，监听器等
