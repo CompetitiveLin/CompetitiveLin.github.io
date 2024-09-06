@@ -195,3 +195,9 @@ ElasticSearch 默认为text类型，但是text类型总会有keyword的类型的
 1. 手动触发
 2. 段 flush 触发
 3. 由前一个成功的 merge 触发
+
+# 分词器
+1. ik-analyzer 分词器，支持中文分词
+2. pinyin 分词器，支持输入拼音查到相关关键词
+3. pattern 分词器，支持正则表达式
+4. whitespace 分词器，用于去除空格
