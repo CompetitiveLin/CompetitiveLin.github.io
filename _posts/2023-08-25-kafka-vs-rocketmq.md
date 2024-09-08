@@ -219,6 +219,17 @@ Kafka：topic 从几十到几百个时候，吞吐量会大幅度下降。原理
 
 主写主读，不支持读写分离
 
+### Producer 负载均衡
+
+当 key 不存在时，会从当前存活的分区中轮询；当 key 存在时，发送给哈希后的指定分区。
+
+### Consumer 负载均衡
+
+Kafka 中主题订阅者的基本单位是消费者组，每个分区只能由消费者组中的一个消费者进行消费，多个消费者组之间对于分区的消费互不影响。共有[三个分区分配器](https://blog.huohaodong.com/blog/how-kafka-design-loadbalance)：
+1. RangeAssignor（默认）
+2. RoundRobinAssignor
+3. StickyAssignor
+
 
 ## RocketMQ 负载策略
 
