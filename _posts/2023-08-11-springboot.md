@@ -148,7 +148,7 @@ PROPAGATION_REQUIRES_NEW 和 PROPAGATION_NESTED 的区别：
 2. transactional修饰的方法内报错就一定会回滚。
 
 # Spring 用到了哪些设计模式
-1. 普通工厂模式：通过 BeanFactory 和 ApplicationContext 容器创建 Bean 对象
+1. 工厂模式：通过 BeanFactory 和 ApplicationContext 容器创建 Bean 对象
 2. 代理模式：AOP 的实现
 3. 单例模式：Bean 默认是单例
 4. 模板方法：jdbcTemplate 等用到了模板方法
