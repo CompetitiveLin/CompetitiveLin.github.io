@@ -86,6 +86,7 @@ client与ZooKeeper集群中的某一台server保持连接，发送读/写请求�
 
 ![](https://img2020.cnblogs.com/blog/1182288/202112/1182288-20211222233718927-1836593403.png)
 
+![](https://www.runoob.com/wp-content/uploads/2020/09/vote-01.png)
 
 ## Raft
 
