@@ -295,6 +295,8 @@ RocketMQ/Kafka 使用 Consumer Group 机制，实现了传统两大消息引擎�
 
 ## 索引机制
 
+基于跳表实现
+
 ![](https://midkuro.github.io/images/amqp-kafka/kafka-03.png)
 
 一个Topic分为多个Partition，一个Partition分为多个Segment。每个Segment对应三个文件：偏移量索引文件、时间戳索引文件、消息存储文件
@@ -307,7 +309,7 @@ RocketMQ/Kafka 使用 Consumer Group 机制，实现了传统两大消息引擎�
 
 ### 偏移量 offset = x
 1. 根据偏移量索引文件名和 offset 的值，进行二分查找，找到小于 x 的最大 offset 文件
-2. 在该偏移量索引文件(.index)中，找到改 offset 对应的 position 位置
+2. 在该偏移量索引文件(.index)中，找到该 offset 对应的 position 位置
 3. 在消息存储文件(.log)中，找到该 position 所对应的消息内容
 
 

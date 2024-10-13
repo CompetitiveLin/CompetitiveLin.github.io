@@ -135,56 +135,21 @@ Kubernetes主要由以下几个核心组件组成：
 - Federation提供跨可用区的集群
 - Fluentd-elasticsearch提供集群日志采集、存储与查询
 
-# 双重校验锁实现单例模式
 
-```java
-public class Singleton {
-
-    private static volatile Singleton singleton = null; // volatile 必不可少，防止jvm指令重排优化
-
-    private Singleton() {
-    }
-
-    public static Singleton getInstance(){
-        //第一次校验singleton是否为空，为了提高代码执行效率，由于单例模式只要一次创建实例即可，所以当创建了一个实例之后，再次调用getInstance方法就不必要进入同步代码块，不用竞争锁。直接返回前面创建的实例即可。
-        if(singleton==null){
-            synchronized (Singleton.class){
-                //第二次校验singleton是否为空，防止二次创建实例
-                if(singleton==null){
-                    singleton = new Singleton();
-                }
-            }
-        }
-        return singleton;
-    }
-
-    public static void main(String[] args) {
-        for (int i = 0; i < 100; i++) {
-            new Thread(new Runnable() {
-                public void run() {
-                    System.out.println(Thread.currentThread().getName()+" : "+Singleton.getInstance().hashCode());
-                }
-            }).start();
-        }
-    }
-}
-```
 
 # 23种设计模式与六大原则
-
 
 ## 23种设计模式
 
 - 创建型
     1. 单例模式（Singleton）
-        - 饿汉模式：类加载的时候就创建实例，整个程序周期都存在
-        - 懒汉模式：只有当第一次使用的时候才创建实例，线程不安全
-        - 双重校验锁：
-        - 静态内部类：
+        - 饿汉模式：类加载的时候就创建实例
+        - 懒汉模式：只有当第一次使用的时候才创建实例
+        - 双重校验锁：线程安全，实例需要用 `volatile` 修饰
     2. 原型模式（Prototype），能够复制已有对象，而又无需使代码依赖它们所属的类。例如 `Cloneable` 接口是立即可用的原型模式。 
-    3. [工厂方法模式（Factory Method）](https://refactoringguru.cn/design-patterns/factory-method/java/example)，在父类中提供一个创建对象的方法， 允许子类决定实例化对象
-    4. [抽象工厂模式（Abstract Factory）](https://refactoringguru.cn/design-patterns/abstract-factory/java/example)，定义了用于创建不同产品的**接口**， 但将实际的创建工作留给了具体工厂类。 每个工厂类型都对应一个特定的产品变体。
-    5. [建造者模式（Builder）](https://refactoringguru.cn/design-patterns/builder/java/example)，分步骤创建复杂对象。
+    3. 工厂方法模式（Factory Method），在父类中提供一个创建对象的方法， 允许子类决定实例化对象
+    4. 抽象工厂模式（Abstract Factory），定义了用于创建不同产品的**接口**， 但将实际的创建工作留给了具体工厂类。 每个工厂类型都对应一个特定的产品变体。
+    5. 建造者模式（Builder），分步骤创建复杂对象。
 - 行为型
     1. 模板方法模式（Template Method），它在基类中定义了一个算法的框架，允许子类在不修改结构的情况下重写算法的特定步骤。
     2. 责任链模式（Chain of Responsibility），它让多个处理器（对象节点）按顺序处理该请求，直到其中某个处理成功为止，例如检查商品模块，需要先检查商品合法性，再检查商品可见性等等。
@@ -204,7 +169,7 @@ public class Singleton {
     4. 装饰模式（Decorator）
     5. 外观模式（Facade），为复杂系统、程序库或框架提供一个简单的接口。通常作用于整个对象子系统上。
     6. 享元模式（Flyweight），共享多个对象的部分状态将内存消耗最小化。 
-    7. 代理模式（Proxy）
+    7. 代理模式（Proxy），例如动态代理
 
 ## 六大原则
 
@@ -299,7 +264,7 @@ TLS 的 rsa 握手过程，存在什么安全隐患，怎么解决的？
 
 #### HTTPS 绝对安全吗
 
-SSL 加密是绝对安全的，但是 HTTPS 并不是绝对安全的，可以通过**中间人攻击**的方式，即所有请求先发送给第三方（中间人），返回中间人的证书，后续的请求/响应都通过中间人进行转发。
+NO，可以通过**中间人攻击**的方式，即所有请求先发送给第三方（中间人），返回中间人的证书，后续的请求/响应都通过中间人进行转发。
 
 ## HTTP版本的演变
 
@@ -541,6 +506,9 @@ DNS 在进行区域传输的时候使用 TCP，其他情况使用 UDP。
 ## Java
 CPU 占用排查：使用 `top` 和 `top -Hp xxx` 命令定位占用率最高的进程和该进程的线程
 内存占用排查：`jstack`， `jmap` 打印出堆栈信息， `jstat` 查看垃圾回收的情况
+
+- Jstat 可以查看新生代的两个S0、s1区、Eden区，以及老年代的内存使用率，还有young gc以及full gc的次数。
+- Jmap 可以查看当前堆中所有每个类的实例数量和内存占用，也可以 dump 内存快照，再由 VituralVM 或 MAT 软件可视化查看。
 
 ## Go
 
