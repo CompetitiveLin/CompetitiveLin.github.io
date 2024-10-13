@@ -96,7 +96,7 @@ Page Cache（页面缓存）从内存中划出一块区域缓存文件页，如�
 
 - Broker: 同步刷盘；设置主从模式，配置副本
 
-- Consumer: At least Once 的消费机制；消费重试；ACK机制；手动提交位移（Kafka）
+- Consumer: At least Once 的消费机制；消费重试；手动提交偏移量（Kafka）
 
 
 ## 零拷贝
@@ -299,6 +299,23 @@ RocketMQ/Kafka 使用 Consumer Group 机制，实现了传统两大消息引擎�
 
 一个Topic分为多个Partition，一个Partition分为多个Segment。每个Segment对应三个文件：偏移量索引文件、时间戳索引文件、消息存储文件
 
+## 根据偏移量/时间戳查找消息
+
+![](https://raw.githubusercontent.com/CompetitiveLin/ImageHostingService/picgo/imgs/202410121820230.png)
+
+偏移量文件中记录的是**稀疏索引**。
+
+### 偏移量 offset = x
+1. 根据偏移量索引文件名和 offset 的值，进行二分查找，找到小于 x 的最大 offset 文件
+2. 在该偏移量索引文件(.index)中，找到改 offset 对应的 position 位置
+3. 在消息存储文件(.log)中，找到该 position 所对应的消息内容
+
+
+### 时间戳 timestamp = t
+1. 在时间戳索引文件(.timeindex)中，找到比 t 大的最小时间戳，与其所对应的 offset 值
+2. 在偏移量索引文件(.index)中，找到该 offset 值对应的 position 位置
+3. 在消息存储文件(.log)中，找到该 position 所对应的消息内容
+
 ## Producer 生产消息的流程
 在消息发送的过程中，涉及到两个线程，main线程和sender线程，其中main线程是消息的生产线程，而sender线程是jvm单例的线程，专门用于消息的发送。在jvm的内存中开辟了一块缓存空间叫RecordAccumulator（消息累加器），用于将多条消息合并成一个批次，然后由sender线程发送给kafka集群。
 
@@ -346,4 +363,15 @@ Controller 用于在 ZK 的帮助下管理和协调整个 Kafka 集群。集群�
 2. Preferred Leader 选举
 3. 集群 Broker 管理
 4. 数据服务，保存最完整的元数据信息
+
+## 手动/自动提交偏移量区别
+
+![](https://raw.githubusercontent.com/CompetitiveLin/ImageHostingService/picgo/imgs/202410121609254.png)
+
+发生 Rebalance 时，自动提交偏移量有可能出现消息丢失/消息重复消费的问题，而手动提交偏移量则不会
+1. 消息丢失：提交的偏移量**大于**消费者处理的最后一个消息的偏移量
+2. 消费重复消费：提交的偏移量**小于**消费者处理的最后一个信息的偏移量
+
+
+
 
