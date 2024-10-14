@@ -160,9 +160,9 @@ RocketMQ 的消费重试是基于**延迟消息**实现的，在消息消费失�
 
 ![](https://rocketmq.apache.org/zh/assets/images/transflow-0b07236d124ddb814aeaf5f6b5f3f72c.png)
 
-二阶段：第一阶段发送 prepared 消息，接着执行本地事务，第二阶段发送 commit 或 rollback 的消息。
-
-定时回查：定时遍历 commitlog 中的半事务消息
+本质是两阶段协议 + 补偿机制（事务回查）实现的。
+- 二阶段：第一阶段发送 prepared 消息，接着执行本地事务，第二阶段发送 commit 或 rollback 的消息。
+- 定时回查：定时遍历 commitlog 中的半事务消息
 
 如果事务正常执行，则 commit 该消息，如果抛出异常，则 rollback。对于消费消息失败，RocketMQ 会尝试重新消费，直到被加入死信队列中为止。在重试的过程中有可能产生重复的消息，所以对于消费端来说要确保**消费幂等**！
 
