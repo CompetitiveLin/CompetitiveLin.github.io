@@ -131,9 +131,19 @@ Prototype（原型）对象和单例对象的区别：
 
 事务的几个参数：rollbackFor，propagation，isolation
 
-PROPAGATION_REQUIRES_NEW 和 PROPAGATION_NESTED 的区别：
-- PROPAGATION_REQUIRES_NEW：内层事务与外层事务就像两个独立的事务一样，一旦内层事务进行了提交后，外层事务不能对其进行回滚，两个事务互不影响。
-- PROPAGATION_NESTED：外层事务的回滚可以引起内层事务的回滚。而内层事务的异常并不会导致外层事务的回滚。
+### 传播机制
+共有七种传播机制，大致上分为三类：
+1. 支持当前事务
+  1. REQUIRED：如果存在当前事务，加入该事务，否则创建新事务执行
+  2. SUPPORTS：如果存在当前事务，加入该事务，否则以非事务的方式执行
+  3. MANDATORY：如果存在当前事务，加入该事务，否则抛出异常
+2. 不支持当前事务
+  1. REQUIRES_NEW：如果存在当前事务，暂时挂起该事务，并且创建新事物执行。**内层事务与外层事务就像两个独立的事务一样，一旦内层事务进行了提交后，外层事务不能对其进行回滚，两个事务互不影响。**
+  2. NOT_SUPPORTED：如果存在当前事务，暂时挂起该事务，否则以非事务的方式执行
+  3. NEVER：如果存在当前事务，抛出异常，否则以非事务的方式运行
+3. 嵌套事务（NESTED）：如果存在当前事务，则创建新事物作为当前事务的嵌套事务执行，否则等价于REQUIRED。**外层事务的回滚可以引起内层事务的回滚。而内层事务的异常并不会导致外层事务的回滚。**
+
+![](https://raw.githubusercontent.com/CompetitiveLin/ImageHostingService/picgo/imgs/202411111929924.png)
 
 ### 事务失效
 
