@@ -62,7 +62,7 @@ IOC的实现原理是工厂模式加反射机制。
 - getSingleton(beanName)方法三级缓存
   1. singletonObjects，一级缓存，存储的是所有创建好了的**单例Bean对象**
   2. earlySingletonObjects，二级缓存，完成实例化，但是还未进行属性注入及初始化的**提前暴露的对象**
-  3. singletonFactories，三级缓存，存放**生产对象的工厂**，并且每次从这个工厂中拿到的对象都是不一样的，二级缓存中存储的就是从这个工厂中获取到的对象，如果Bean存在AOP的话，返回的是AOP的**代理对象**，提前进行了代理，避免对后面重复创建代理对象。
+  3. singletonFactories，三级缓存，存放**生产对象的工厂**，并且每次从这个工厂中拿到的对象都是不一样的，二级缓存中存储的就是从这个工厂中获取到的对象，如果Bean存在AOP的话，返回的是AOP的**代理对象**，提前进行了代理，避免对后面重复创建代理对象。对象加入三级缓存的前提是执行了构造器，因此全是构造器注入的循环依赖无法解决。
 
 ![](https://raw.githubusercontent.com/CompetitiveLin/ImageHostingService/picgo/imgs/202305231628567.png)
 
