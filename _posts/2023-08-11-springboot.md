@@ -100,6 +100,11 @@ Prototype（原型）对象和单例对象的区别：
 3. @Import
 4. 新建一个实现FactoryBean接口的类
 
+
+## @Configuration 和 @Component 的详细区别
+
+@Configuration 中所有带 @Bean 注解的方法都会被动态代理（cglib），因此调用该方法返回的都是同一个实例。而 @Conponent 修饰的类不会被代理，每实例化一次就会创建一个新的对象。
+
 [面向切面编程（AOP）](https://pdai.tech/md/spring/spring-x-framework-aop.html)也是一种设计思想，本质是为了解耦。其实现方式是动态织入，在运行时动态将要增强的代码织入到目标类中，借助动态代理技术完成的。并且接口与非接口的动态代理机制并不相同，如下所示：
 - 接口使用**JDK代理**，通过反射类Proxy以及拦截器的InvocationHandler回调接口实现的，使用反射，效率会低，不提供子类代理。
 - 非接口使用**CGlib代理**，没有接口，只有实现类，采用底层字节码增强技术ASM在运行时使用Enhancer类创建目标的子类，提供子类代理。
